@@ -13,7 +13,8 @@ public class Coin : MonoBehaviour
     {
         _rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
         _animator = gameObject.GetComponent<Animator>();
-        _rigidbody2D.AddForce(new Vector3(0, 0.2f, 0f) * _force);
+        _rigidbody2D.AddForce(new Vector3(Random.RandomRange(-0.15f, 0.15f), 0.3f, 0f) * _force);
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -21,7 +22,6 @@ public class Coin : MonoBehaviour
         if (collision.gameObject.CompareTag("Wall"))
         {
             StateReduceColor();
-            //StartCoroutine(FadeChangeColor());
         }
     }
    void StateIdle()
@@ -31,31 +31,5 @@ public class Coin : MonoBehaviour
     void StateReduceColor()
     {
         _animator.SetBool("ReduceColor", true);
-    }
-    IEnumerator FadeChangeColor()
-    {
-
-        _spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        float AphaSprite = _spriteRenderer.color.a;
-        if (AphaSprite != 0)
-        {
-            byte CurrentColorA = 255;
-            while (CurrentColorA > 0)
-            {
-                yield return new WaitForEndOfFrame();
-                CurrentColorA -= 2;
-                Debug.Log(CurrentColorA);
-                if (CurrentColorA == (byte)254)
-                {
-                    CurrentColorA = (byte)0;
-                }
-                _spriteRenderer.color = new Color32(255, 255, 255, CurrentColorA);
-            }
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }
-
     }
 }

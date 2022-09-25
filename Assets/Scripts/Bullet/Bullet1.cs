@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Bullet1 : BulletPlayer
 {
+    private void Start()
+    {
+        GetComponent<Rigidbody2D>().velocity = transform.right * bulletSpeed;
+    }
     protected override void OnEnable()
     {
         base.OnEnable();

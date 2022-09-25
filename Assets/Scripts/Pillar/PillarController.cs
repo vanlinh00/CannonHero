@@ -10,7 +10,7 @@ public class PillarController : MonoBehaviour
     [SerializeField] float _dis2Pillar = 4.76f;
     public void MoveToTarget()
     {
-        Vector3 Target = new Vector3(transform.position.x, Random.RandomRange(-5.61f, -4.69f), 0);
+        Vector3 Target = new Vector3(transform.position.x+ Random.RandomRange(-5.61f, -4.69f),transform.position.y , 0);
         StartCoroutine(Move(transform, Target, _moveSpeed));
     }
     IEnumerator Move(Transform CurrentTransform, Vector3 Target, float TotalTime)

@@ -27,7 +27,6 @@ public class Weapon : MonoBehaviour
         _bullet = ObjectPooler._instance.SpawnFromPool("Bullet" + idBullet, FirePoint(), _target);
         BaseBullet baseBullet = _bullet.GetComponent<BaseBullet>();
         baseBullet.bulletSpeed = bulletForce;
-        baseBullet.timeLife = lifeTimeBullet;
     }
     public Vector3 FirePoint()
     {

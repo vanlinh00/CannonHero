@@ -12,27 +12,40 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject[] _objectComponentPlayer;
     [SerializeField] float _torqueSpeed=1200f;
     [SerializeField] float _force = 300f;
+
+    public enum StatePlayer
+    {
+        Living,
+        Die,
+    }
+
+    public StatePlayer statePlayer;
     private void Start()
     {
         _weapon = Weapon.GetComponent<Weapon>();
     }
-    private void Update()
-    {
-        if (Input.GetMouseButton(0) && !_isRotation && _weapon.currentAngleZ <= 90f)
+    public void RotateWeapon()
+    {   
+        if(!_isRotation && _weapon.currentAngleZ <= 90f)
         {
             _weapon.AutoRotate();
         }
-        if (Input.GetMouseButtonUp(0) && !_isShoot)
+    }
+    public void WeaponShoot()
+    {
+        if(!_isShoot)
         {
             _isRotation = true;
             _isShoot = true;
             _weapon.Shoot();
         }
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.transform.CompareTag("Bullet"))
           {
+            statePlayer = StatePlayer.Die;
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
             BreakObjectInPlayer();
             collision.gameObject.SetActive(false);
