@@ -17,7 +17,8 @@ public class UiController : MonoBehaviour
     }
     void RestartGame()
     {
-        SceneManager.LoadScene(0);
+         SceneManager.LoadScene(0);
+       //  GameController._instance.LoadScenceAgain();
     }
     // Update is called once per frame
     void Update()

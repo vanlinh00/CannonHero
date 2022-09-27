@@ -7,12 +7,13 @@ public class Weapon : MonoBehaviour
 {
     [SerializeField] float _speedRotate = 1.5f;
     [SerializeField] GameObject _firePoint;
+    [SerializeField] GameObject _particleFirePoint;
     public float currentAngleZ = 0f;
     private Quaternion _target;
 
     // Bullet 
     [SerializeField] GameObject _bullet;
-    [SerializeField] float bulletForce;
+    [SerializeField] float _bulletForce;
     public float idBullet;
     public float lifeTimeBullet;
    
@@ -24,15 +25,22 @@ public class Weapon : MonoBehaviour
     }
     public void Shoot()
     {
-        _bullet = ObjectPooler._instance.SpawnFromPool("Bullet" + idBullet, FirePoint(), _target);
+        _particleFirePoint.SetActive(true);
+        _bullet = ObjectPooler._instance.SpawnFromPool("Bullet" + idBullet, PosFirePoint(), _target);
         BaseBullet baseBullet = _bullet.GetComponent<BaseBullet>();
-        baseBullet.bulletSpeed = bulletForce;
+        baseBullet.bulletSpeed = _bulletForce;
+        baseBullet.GetComponent<Iflyable>().Fly();
+        StartCoroutine(WaitOfParticle(_particleFirePoint));
     }
-    public Vector3 FirePoint()
+    IEnumerator WaitOfParticle(GameObject FirePoint)
     {
-        return _firePoint.transform.position;
+        yield return new WaitForSeconds(1f);
+        FirePoint.SetActive(false);
     }
-
+    public Vector3 PosFirePoint()
+    {
+        return _firePoint.transform.position; 
+    }
    public IEnumerator FadeRotateToTarget(float currentDegree, float TargetDegree)
     {
         float t = currentDegree;
@@ -44,4 +52,11 @@ public class Weapon : MonoBehaviour
             transform.rotation = target;
         }
     }
+   public void ResetRotation()
+    {
+        currentAngleZ = 0f;
+      //  transform.Rotate(new Vector3(0, 0, 0));
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+
 }

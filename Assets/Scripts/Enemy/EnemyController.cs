@@ -10,6 +10,15 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float _force;
     [SerializeField] float _torqueSpeed;
     private Weapon _weapon;
+    public bool isCurrentEnemy;
+    public Vector3 _posEnemy;
+
+    // Component Enemy
+    [SerializeField] GameObject _head;
+    [SerializeField] GameObject _body;
+    [SerializeField] GameObject _feet;
+
+   public bool isBornCoin;
     public enum StateEnemy
     {
         Living,
@@ -18,25 +27,58 @@ public class EnemyController : MonoBehaviour
     public StateEnemy _stateEnemy;
     void Start()
     {
+        isBornCoin = true;
+        isCurrentEnemy = false;
         _weapon = Weapon.GetComponent<Weapon>();
         _posPlayer = GameObject.FindGameObjectWithTag("Player").transform.position;
     }
-   public void Die()
+    private void Update()
     {
-        _stateEnemy = StateEnemy.Die;
-        if(gameObject.GetComponent<Rigidbody2D>()==null)
+        if (GameController._instance.IsGameOver&& isCurrentEnemy&& _stateEnemy!=StateEnemy.Die)
         {
-            _rigidbody2D = gameObject.AddComponent<Rigidbody2D>();
-            _rigidbody2D.AddForce(new Vector3(0.2f, 0.7f, 0f) * _force);
-            _rigidbody2D.AddTorque(_torqueSpeed, ForceMode2D.Force);
+            isCurrentEnemy = false;
+            Shoot();
         }
     }
+   public void Die()
+    {
+        if(isBornCoin)
+        {
+            Vector3 PosCoin = new Vector3(_head.transform.position.x, _head.transform.position.y + 0.2f, 0f);
+            gameObject.transform.parent.GetComponent<Pillar>().BonrNewCoinOnPillar(PosCoin);
+            isBornCoin = false;
+        }
+        _stateEnemy = StateEnemy.Die;
+
+        if (gameObject.GetComponent<Rigidbody2D>() == null)
+        {
+            AddRigibody();
+            _rigidbody2D.AddForce(new Vector3(0.2f, 0.7f, 0f) * _force);
+            _rigidbody2D.AddTorque(_torqueSpeed, ForceMode2D.Force);
+            _head.GetComponent<PolygonCollider2D>().enabled = false;
+            _body.GetComponent<BoxCollider2D>().enabled = false;
+            _feet.GetComponent<BoxCollider2D>().enabled = false;
+       }
+    }
+    public void AddRigibody()
+    {
+       _rigidbody2D = gameObject.AddComponent<Rigidbody2D>();
+    }
+    public void RemoveRigibody()
+    {
+        Destroy(gameObject.GetComponent<Rigidbody2D>());
+    }
+
     void WeaPonRotateToPlayer()
     {
-        Vector3 VectorA = _weapon.FirePoint() -Weapon.transform.position;
+        Vector3 VectorA = _weapon.PosFirePoint() -Weapon.transform.position;
         Vector3 VectorB = _posPlayer-Weapon.transform.position;
         float angle = Vector2.Angle(VectorA, VectorB);
         StartCoroutine(_weapon.FadeRotateToTarget(0, angle));
+    }
+    public Weapon GetWeapon()
+    {
+        return _weapon;
     }
   public void Shoot()
     {
@@ -47,5 +89,20 @@ public class EnemyController : MonoBehaviour
         WeaPonRotateToPlayer();
         yield return new WaitForSeconds(1f);
         _weapon.Shoot();
+    }
+    public void ResetEnemy()
+    {
+        isBornCoin = true;
+        isCurrentEnemy = false;
+        _weapon = Weapon.GetComponent<Weapon>();
+        _posPlayer = GameObject.FindGameObjectWithTag("Player").transform.position;
+
+        _stateEnemy = StateEnemy.Living;
+        transform.localPosition = _posEnemy;
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+        isCurrentEnemy = false;
+        _head.GetComponent<PolygonCollider2D>().enabled = true;
+        _body.GetComponent<BoxCollider2D>().enabled = true;
+        _feet.GetComponent<BoxCollider2D>().enabled = true;
     }
 }

@@ -2,57 +2,69 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class GameController : Singleton<GameController>
 {
-    [SerializeField] GameObject _currentPillar;
+    [SerializeField] Pillar _currentPillar;
     [SerializeField] PlayerController _player;
 
     [SerializeField] EnemyController _currentEnemy;
-
     [SerializeField] PillarController _pillarController;
-    private bool _isContinueGame = true;
+
+    public bool IsGameOver = false;
+    [SerializeField] GameObject _camera;
+    protected override void Awake()
+    {
+        base.Awake();
+    }
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-
-        _currentPillar = _pillarController.gameObject.transform.GetChild(0).gameObject;
-        _currentEnemy = _currentPillar.transform.GetChild(0).gameObject.GetComponent<EnemyController>();
     }
     private void Update()
     {
-    //    if(_isContinueGame)
-    //    {
-            if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && !_player.isRotation)
+        {
+            _player.RotateWeapon();
+        }
+        if (Input.GetMouseButtonUp(0) && !_player.isShoot)
+        {
+            _player.WeaponShoot();
+            _player.isShoot = true;
+            _player.isRotation = true;
+            UpDatePassPillar();
+        }
+        if (_player.isShoot)
+        {
+            if (_currentEnemy._stateEnemy == EnemyController.StateEnemy.Die)
             {
-                _player.RotateWeapon();
+                _player.isShoot = false;
+                StartCoroutine(WaitTimeMoveToTarget());
             }
-            if (Input.GetMouseButtonUp(0))
-            {
-                _player.WeaponShoot();
-                StartCoroutine(CheckEnemyShoot());
-            }
-       // }
-     
+        }
     }
-    IEnumerator CheckEnemyShoot()
+    IEnumerator WaitTimeMoveToTarget()
     {
-        yield return new WaitForSeconds(2.2f);
-
-        if (_currentEnemy._stateEnemy == EnemyController.StateEnemy.Die)
-        {
-            _pillarController.MoveToTarget();
-        }
-        else
-        {
-            if(_player.statePlayer==PlayerController.StatePlayer.Die)
-            {
-
-            }
-            else
-            {
-                _currentEnemy.Shoot();
-            }
-            
-        }
+        yield return new WaitForSeconds(0.8f);
+        _player.GetWeapon().ResetRotation();
+        _pillarController.MoveToTarget();
+        _player.StateRun();
+        yield return new WaitForSeconds(1f);
+        _pillarController.BonrNextNewPillar();
+        _player.isRotation = false;
+        yield return new WaitForSeconds(0.35f);
+        CoinManager._instance.AddCoinsToPool();
     }
+    public void UpDatePassPillar()
+    {
+        _currentPillar = _pillarController.gameObject.transform.GetChild(0).GetComponent<Pillar>();
+        _currentEnemy = _currentPillar.GetEnemy().GetComponent<EnemyController>();
+        _currentEnemy.isCurrentEnemy = true;
+        IsGameOver = false;
+    }
+    //public void LoadScenceAgain()
+    //{
+    //    _pillarController.ResetPillarController();
+    //    _player.ResetPlayer();
+    //    _camera.transform.position = new Vector3(0, 0, -10);
+    //}
 }

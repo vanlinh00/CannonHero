@@ -5,14 +5,20 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] GameObject Weapon;
+    [SerializeField] GameObject ParticleDead;
     private Weapon _weapon;
-    private bool _isRotation = false;
-    private bool _isShoot = false;
+    public bool isRotation = false;
+    public bool isShoot = false;
     private Rigidbody2D _rbComponentPlayer;
     [SerializeField] GameObject[] _objectComponentPlayer;
     [SerializeField] float _torqueSpeed=1200f;
     [SerializeField] float _force = 300f;
+    [SerializeField] Animator _animator;
 
+    // State Run
+    [SerializeField] float _speedMove;
+    [SerializeField] Vector3 _targetPos;
+    [SerializeField] Vector3 _currentPos;
     public enum StatePlayer
     {
         Living,
@@ -22,34 +28,39 @@ public class PlayerController : MonoBehaviour
     public StatePlayer statePlayer;
     private void Start()
     {
+        StateIdle();
         _weapon = Weapon.GetComponent<Weapon>();
+    }
+    public Weapon GetWeapon()
+    {
+        return _weapon;
     }
     public void RotateWeapon()
     {   
-        if(!_isRotation && _weapon.currentAngleZ <= 90f)
+        if( _weapon.currentAngleZ <= 90f)
         {
             _weapon.AutoRotate();
         }
+        //if ()
+        //{
+        //    RotateHead();
+        //}    
     }
     public void WeaponShoot()
     {
-        if(!_isShoot)
-        {
-            _isRotation = true;
-            _isShoot = true;
-            _weapon.Shoot();
-        }
+       _weapon.Shoot();
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.transform.CompareTag("Bullet"))
-          {
+        if (collision.transform.CompareTag("Bullet"))
+        {
             statePlayer = StatePlayer.Die;
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            _animator.enabled = false;
+            ParticleDead.SetActive(true);
             BreakObjectInPlayer();
             collision.gameObject.SetActive(false);
-          }
+        }
     }
     public void BreakObjectInPlayer()
     {
@@ -64,5 +75,57 @@ public class PlayerController : MonoBehaviour
             _rbComponentPlayer.AddTorque(_torqueSpeed, ForceMode2D.Force);
         }
     }
+    
+    public void StateIdle()
+    {
+        _animator.SetBool("IsRun", false);
+    }
+    public void StateRun()
+    {
+        _animator.SetBool("IsRun", true);
+        StartCoroutine(Run());
+    }
+    IEnumerator Run()
+    {  
+         StartCoroutine(Move(transform, _targetPos, _speedMove));
+         yield return new WaitForSeconds(_speedMove);
+        StartCoroutine(Move(transform, _currentPos, _speedMove));
+        yield return new WaitForSeconds(_speedMove);
+        StateIdle();
+    }
+
+    IEnumerator Move(Transform CurrentTransform, Vector3 Target, float TotalTime)
+    {
+        var passed = 0f;
+        var init = CurrentTransform.transform.position;
+        while (passed < TotalTime)
+        {
+            passed += Time.deltaTime;
+            var normalized = passed / TotalTime;
+            var current = Vector3.Lerp(init, Target, normalized);
+            CurrentTransform.position = current;
+            yield return null;
+        }
+    }
+    void RotateHead()
+    {
+        StartCoroutine(FadeRotation(0f, 12f));
+    }
+    IEnumerator FadeRotation(float currentDegree, float Degree)
+    {
+        float t = currentDegree;
+        while (t <= Degree)
+        {
+            yield return new WaitForEndOfFrame();
+            t += 1.5f;
+            Quaternion target = Quaternion.Euler(transform.rotation.x, transform.rotation.y,t );
+            transform.rotation = target;
+        }
+    }
+    //public void ResetPlayer()
+    //{
+    //    transform.position = new Vector3(-1.545f, -1.733f, 0);
+    //    _weapon.ResetRotation();
+    //}
 
 }
