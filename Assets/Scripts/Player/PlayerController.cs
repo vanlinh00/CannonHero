@@ -19,6 +19,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float _speedMove;
     [SerializeField] Vector3 _targetPos;
     [SerializeField] Vector3 _currentPos;
+
+    // Rotate Head
+    [SerializeField] GameObject _headHero;
+    public bool isRotateHead = false;
     public enum StatePlayer
     {
         Living,
@@ -37,14 +41,10 @@ public class PlayerController : MonoBehaviour
     }
     public void RotateWeapon()
     {   
-        if( _weapon.currentAngleZ <= 90f)
+        if( _weapon.currentAngleZ <= 90.3f)
         {
             _weapon.AutoRotate();
         }
-        //if ()
-        //{
-        //    RotateHead();
-        //}    
     }
     public void WeaponShoot()
     {
@@ -75,25 +75,41 @@ public class PlayerController : MonoBehaviour
             _rbComponentPlayer.AddTorque(_torqueSpeed, ForceMode2D.Force);
         }
     }
-    
     public void StateIdle()
     {
         _animator.SetBool("IsRun", false);
+        _animator.SetBool("RotateHead", false);
     }
     public void StateRun()
     {
         _animator.SetBool("IsRun", true);
-        StartCoroutine(Run());
     }
-    IEnumerator Run()
-    {  
-         StartCoroutine(Move(transform, _targetPos, _speedMove));
-         yield return new WaitForSeconds(_speedMove);
+    public void RotateHead()
+    {
+        if(!isRotateHead)
+        {
+            StateRotate();
+            isRotateHead = true;
+        }
+    }
+    public void StateRotate()
+    {
+        _animator.SetBool("IsRun", false);
+        _animator.SetBool("RotateHead", true);
+    }   
+   public IEnumerator Run()
+    {
+        StateRun();
+        StartCoroutine(Move(transform, _targetPos, _speedMove));
+        yield return new WaitForSeconds(_speedMove);
         StartCoroutine(Move(transform, _currentPos, _speedMove));
         yield return new WaitForSeconds(_speedMove);
         StateIdle();
     }
-
+    public float GetTimeSpeed()
+    {
+        return _speedMove;
+    }
     IEnumerator Move(Transform CurrentTransform, Vector3 Target, float TotalTime)
     {
         var passed = 0f;
@@ -107,21 +123,35 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
     }
-    void RotateHead()
-    {
-        StartCoroutine(FadeRotation(0f, 12f));
-    }
-    IEnumerator FadeRotation(float currentDegree, float Degree)
-    {
-        float t = currentDegree;
-        while (t <= Degree)
-        {
-            yield return new WaitForEndOfFrame();
-            t += 1.5f;
-            Quaternion target = Quaternion.Euler(transform.rotation.x, transform.rotation.y,t );
-            transform.rotation = target;
-        }
-    }
+
+  //bool isRotateUp = false;
+  //public void RotateHeadUp()
+  //  {
+  //      if(!isRotateUp)
+  //      {
+  //          StartCoroutine(FadeRotation(_headHero, 0f, 18f));
+  //          isRotateUp = true;
+  //      }  
+  //  }
+  //public void RotateHeadNormal()
+  //  {
+  //      if (isRotateUp)
+  //      {
+  //          StartCoroutine(FadeRotation(_headHero, 18f, 0f));
+  //          isRotateUp = false;
+  //      }
+  //  }
+  //  IEnumerator FadeRotation(GameObject Obj,float currentDegree, float Degree)
+  //  {
+  //      float t = currentDegree;
+  //      while (t <= Degree)
+  //      {
+  //          yield return new WaitForEndOfFrame();
+  //          t += 20.5f*Time.deltaTime;
+  //          Quaternion target = Quaternion.Euler(Obj.transform.rotation.x, Obj.transform.rotation.y,t );
+  //          Obj.transform.rotation = target;
+  //      }
+  //  }
     //public void ResetPlayer()
     //{
     //    transform.position = new Vector3(-1.545f, -1.733f, 0);

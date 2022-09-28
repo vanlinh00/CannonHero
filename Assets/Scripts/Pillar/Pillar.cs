@@ -7,6 +7,7 @@ public class Pillar : MonoBehaviour
     [SerializeField] GameObject _enemy;
     [SerializeField] EnemyController _enemyController;
     [SerializeField] GameObject _bodyPillar;
+    [SerializeField] Animator _animator;
 
     //private void Start()
     //{
@@ -21,7 +22,8 @@ public class Pillar : MonoBehaviour
         return _bodyPillar;
     }
     public void ResetPillar()
-    {   
+    {
+        StateIdle();
         _enemyController.isBornCoin = true;
         _enemyController.RemoveRigibody();
         _enemyController.ResetEnemy();
@@ -33,10 +35,18 @@ public class Pillar : MonoBehaviour
     }
     public void BonrNewCoinOnPillar(Vector3 PosCoin)
     {
-     List<GameObject> ListCoins = CoinManager._instance.BonrCoins(8, PosCoin);
+     List<GameObject> ListCoins = CoinManager._instance.BonrCoins(GameController._instance.AmountCoin(), PosCoin);
       foreach(GameObject Coin in ListCoins)
         {
             Coin.transform.parent = transform;
         }
+    }
+    public void StateShock()
+    {
+        _animator.SetBool("Shock", true);
+    }
+    public void StateIdle()
+    {
+        _animator.SetBool("Shock", false);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GameController : Singleton<GameController>
 {
@@ -12,45 +13,100 @@ public class GameController : Singleton<GameController>
 
     public bool IsGameOver = false;
     [SerializeField] GameObject _camera;
+    private bool _canClick;
+    private bool _isNextCol = false;
+    private int _currentScore;
+    private int _currentCoins;
     protected override void Awake()
     {
         base.Awake();
     }
     private void Start()
     {
-        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+           _isNextCol = true;
+           _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
     private void Update()
     {
-        if (Input.GetMouseButton(0) && !_player.isRotation)
+        CheckCanClick();
+
+        if (_canClick == false)
         {
-            _player.RotateWeapon();
+            return;
         }
-        if (Input.GetMouseButtonUp(0) && !_player.isShoot)
-        {
-            _player.WeaponShoot();
-            _player.isShoot = true;
-            _player.isRotation = true;
-            UpDatePassPillar();
-        }
+            if (Input.GetMouseButton(0) && !_player.isRotation&& _isNextCol)
+            {
+                _player.RotateHead();
+                _player.RotateWeapon();
+            }
+            if (Input.GetMouseButtonUp(0)&&!_player.isShoot&& _isNextCol)
+            {
+                _isNextCol = false;
+                _player.isShoot = true;
+                _player.WeaponShoot();
+                _player.isRotation = true;
+                _player.isRotateHead = false;
+                UpDatePassPillar();
+            }
+        
         if (_player.isShoot)
         {
             if (_currentEnemy._stateEnemy == EnemyController.StateEnemy.Die)
             {
                 _player.isShoot = false;
-                StartCoroutine(WaitTimeMoveToTarget());
+                AlwaysPresent._instance.CountCoins();
+                GamePlay._instance.CountScore();
+                StartCoroutine(PassPillar());
+            }
+            if(_player.statePlayer==PlayerController.StatePlayer.Die)
+            {
+                StartCoroutine(UiController._instance.FadeDisPlayGameOver());
             }
         }
     }
-    IEnumerator WaitTimeMoveToTarget()
+    void CheckCanClick()
     {
-        yield return new WaitForSeconds(0.8f);
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                _canClick = false;
+            }
+            else
+            {
+                _canClick = true;
+            }
+        }
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+            {
+                _canClick = false;
+            }
+            else
+            {
+                _canClick = true;
+            }
+        }
+    }
+  
+    IEnumerator PassPillar()
+    {
+        yield return new WaitForSeconds(0.9f);
         _player.GetWeapon().ResetRotation();
+        // Pillar run
         _pillarController.MoveToTarget();
-        _player.StateRun();
-        yield return new WaitForSeconds(1f);
+
+        // Play run
+        StartCoroutine(_player.Run());
+        yield return new WaitForSeconds(_player.GetTimeSpeed()*2);
+    
+
         _pillarController.BonrNextNewPillar();
         _player.isRotation = false;
+        _isNextCol = true;
+
+
         yield return new WaitForSeconds(0.35f);
         CoinManager._instance.AddCoinsToPool();
     }
@@ -60,6 +116,39 @@ public class GameController : Singleton<GameController>
         _currentEnemy = _currentPillar.GetEnemy().GetComponent<EnemyController>();
         _currentEnemy.isCurrentEnemy = true;
         IsGameOver = false;
+    }
+    public void CountScore()
+    {
+        _currentScore++;
+    }
+    public float GetCurrentScore()
+    {
+        return _currentScore;
+    }
+    public void CountCoins()
+    {
+        _currentCoins += AmountCoin();
+    }
+    public int AmountCoin()
+    {
+        int AmountCoins = 0;
+        if (_currentEnemy.isHitHead)
+        {
+            AmountCoins = 7;
+        }
+        else if (_currentEnemy.isHitBody)
+        {
+            AmountCoins = 4;
+        }
+        else
+        {
+            AmountCoins = 3;
+        }
+        return AmountCoins;
+    }
+    public float GetAmountCoins()
+    {
+        return _currentCoins;
     }
     //public void LoadScenceAgain()
     //{

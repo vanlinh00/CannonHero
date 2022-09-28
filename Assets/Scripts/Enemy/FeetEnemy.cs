@@ -8,6 +8,7 @@ public class FeetEnemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
+            gameObject.transform.parent.GetComponent<EnemyController>().isHitFeet = true;
             gameObject.transform.parent.GetComponent<EnemyController>().Die();
         }
     }

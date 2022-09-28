@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class CoinManager : Singleton<CoinManager>
@@ -22,8 +21,11 @@ public class CoinManager : Singleton<CoinManager>
             GameObject NewCoin = ObjectPooler._instance.SpawnFromPool("Coin", NewPos, Quaternion.identity);
             NewCoin.SetActive(false);
             NewCoin.SetActive(true);
-            NewCoin.GetComponent<Coin>().StateIdle();
-            NewCoin.GetComponent<Coin>().AddForce();
+
+            Coin CoinSc = NewCoin.GetComponent<Coin>();
+            CoinSc.ResetCoin();
+            CoinSc.StateIdle();
+            CoinSc.AddForce();
             _listObectCoins.Add(NewCoin);
         }
         return _listObectCoins;

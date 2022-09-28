@@ -18,7 +18,12 @@ public class EnemyController : MonoBehaviour
     [SerializeField] GameObject _body;
     [SerializeField] GameObject _feet;
 
-   public bool isBornCoin;
+    public bool isBornCoin;
+
+    public bool isHitHead;
+    public bool isHitBody;
+    public bool isHitFeet;
+
     public enum StateEnemy
     {
         Living,
@@ -27,6 +32,10 @@ public class EnemyController : MonoBehaviour
     public StateEnemy _stateEnemy;
     void Start()
     {
+        isHitHead = false;
+        isHitBody = false;
+        isHitFeet = false;
+
         isBornCoin = true;
         isCurrentEnemy = false;
         _weapon = Weapon.GetComponent<Weapon>();
@@ -45,7 +54,7 @@ public class EnemyController : MonoBehaviour
         if(isBornCoin)
         {
             Vector3 PosCoin = new Vector3(_head.transform.position.x, _head.transform.position.y + 0.2f, 0f);
-            gameObject.transform.parent.GetComponent<Pillar>().BonrNewCoinOnPillar(PosCoin);
+            gameObject.transform.parent.transform.parent.GetComponent<Pillar>().BonrNewCoinOnPillar(PosCoin);
             isBornCoin = false;
         }
         _stateEnemy = StateEnemy.Die;
@@ -104,5 +113,11 @@ public class EnemyController : MonoBehaviour
         _head.GetComponent<PolygonCollider2D>().enabled = true;
         _body.GetComponent<BoxCollider2D>().enabled = true;
         _feet.GetComponent<BoxCollider2D>().enabled = true;
+
+        _head.GetComponent<HeadEnemy>().ParticleBoolHead.SetActive(false);
+
+        isHitHead = false;
+        isHitBody = false;
+        isHitFeet = false;
     }
 }

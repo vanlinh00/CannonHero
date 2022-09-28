@@ -16,7 +16,11 @@ public class Weapon : MonoBehaviour
     [SerializeField] float _bulletForce;
     public float idBullet;
     public float lifeTimeBullet;
-   
+
+    //snatch gun
+    [SerializeField] float _speedSnatch;
+    [SerializeField] Vector3 _targetPos;
+    [SerializeField] Vector3 _currentPos;
     public void AutoRotate()
     {
         _target = Quaternion.Euler(transform.rotation.x, transform.rotation.y, currentAngleZ);
@@ -25,17 +29,18 @@ public class Weapon : MonoBehaviour
     }
     public void Shoot()
     {
+        StartCoroutine(WaitShoot());
+    }
+    IEnumerator WaitShoot()
+    {
         _particleFirePoint.SetActive(true);
         _bullet = ObjectPooler._instance.SpawnFromPool("Bullet" + idBullet, PosFirePoint(), _target);
         BaseBullet baseBullet = _bullet.GetComponent<BaseBullet>();
         baseBullet.bulletSpeed = _bulletForce;
         baseBullet.GetComponent<Iflyable>().Fly();
-        StartCoroutine(WaitOfParticle(_particleFirePoint));
-    }
-    IEnumerator WaitOfParticle(GameObject FirePoint)
-    {
+        StartCoroutine(Snatch());
         yield return new WaitForSeconds(1f);
-        FirePoint.SetActive(false);
+        _particleFirePoint.SetActive(false);
     }
     public Vector3 PosFirePoint()
     {
@@ -59,4 +64,28 @@ public class Weapon : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
+    //snatch gun
+    IEnumerator Snatch()
+    {
+        _targetPos = new Vector3(transform.position.x - 0.14f, transform.position.x, 0);
+        _currentPos = new Vector3(transform.position.x, transform.position.y, 0);
+        StartCoroutine(Move(transform, _targetPos, _speedSnatch));
+        yield return new WaitForSeconds(_speedSnatch);
+        StartCoroutine(Move(transform, _currentPos, _speedSnatch));
+        yield return new WaitForSeconds(_speedSnatch);
+    }
+
+    IEnumerator Move(Transform CurrentTransform, Vector3 Target, float TotalTime)
+    {
+        var passed = 0f;
+        var init = CurrentTransform.transform.position;
+        while (passed < TotalTime)
+        {
+            passed += Time.deltaTime;
+            var normalized = passed / TotalTime;
+            var current = Vector3.Lerp(init, Target, normalized);
+            CurrentTransform.position = current;
+            yield return null;
+        }
+    }
 }

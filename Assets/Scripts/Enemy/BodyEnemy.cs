@@ -8,6 +8,7 @@ public class BodyEnemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
+            gameObject.transform.parent.GetComponent<EnemyController>().isHitBody = true;
             gameObject.transform.parent.GetComponent<EnemyController>().Die();
         }
     }

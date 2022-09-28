@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PillarController : MonoBehaviour
 {
-    [SerializeField] float _moveSpeed = 1f;
+    [SerializeField] float _moveTime;
     [SerializeField] float _dis2Pillar = 4.76f;
     public void MoveToTarget()
     {
@@ -12,7 +12,7 @@ public class PillarController : MonoBehaviour
         float A = Random.RandomRange(0.89f, 1.53f);
         float PosX = A - transform.GetChild(1).transform.localPosition.x;
         Vector3 Target = new Vector3(PosX,transform.position.y, 0);
-        StartCoroutine(Move(transform, Target, _moveSpeed));
+        StartCoroutine(Move(transform, Target, _moveTime));
     }
     IEnumerator Move(Transform CurrentTransform, Vector3 Target, float TotalTime)
     {
@@ -32,7 +32,7 @@ public class PillarController : MonoBehaviour
         GameObject FirstPillar = transform.GetChild(0).gameObject;
         AddPillarToObjectPool(FirstPillar);
         Vector3 PosLastPillar = transform.GetChild(transform.childCount - 1).transform.position;
-        GameObject NewPillar = ObjectPooler._instance.SpawnFromPool("Pillar", new Vector3(PosLastPillar.x + 4.68f, Random.RandomRange(-3.88f, -2f), 0), Quaternion.identity);
+        GameObject NewPillar = ObjectPooler._instance.SpawnFromPool("Pillar", new Vector3(PosLastPillar.x + 4.68f, Random.RandomRange(-3.88f, -2.4f), 0), Quaternion.identity);
         
         NewPillar.GetComponent<Pillar>().SetEnabledColliderInBody(true);
         NewPillar.GetComponent<Pillar>().ResetPillar();
