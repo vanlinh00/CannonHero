@@ -17,6 +17,7 @@ public class GameController : Singleton<GameController>
     private bool _isNextCol = false;
     private int _currentScore;
     private int _currentCoins;
+    public bool isOnShop = false;
     protected override void Awake()
     {
         base.Awake();
@@ -34,12 +35,14 @@ public class GameController : Singleton<GameController>
         {
             return;
         }
-            if (Input.GetMouseButton(0) && !_player.isRotation&& _isNextCol)
+        if(!isOnShop)
+        {
+            if (Input.GetMouseButton(0) && !_player.isRotation && _isNextCol)
             {
                 _player.RotateHead();
                 _player.RotateWeapon();
             }
-            if (Input.GetMouseButtonUp(0)&&!_player.isShoot&& _isNextCol)
+            if (Input.GetMouseButtonUp(0) && !_player.isShoot && _isNextCol)
             {
                 _isNextCol = false;
                 _player.isShoot = true;
@@ -48,19 +51,20 @@ public class GameController : Singleton<GameController>
                 _player.isRotateHead = false;
                 UpDatePassPillar();
             }
-        
-        if (_player.isShoot)
-        {
-            if (_currentEnemy._stateEnemy == EnemyController.StateEnemy.Die)
+
+            if (_player.isShoot)
             {
-                _player.isShoot = false;
-                AlwaysPresent._instance.CountCoins();
-                GamePlay._instance.CountScore();
-                StartCoroutine(PassPillar());
-            }
-            if(_player.statePlayer==PlayerController.StatePlayer.Die)
-            {
-                StartCoroutine(UiController._instance.FadeDisPlayGameOver());
+                if (_currentEnemy._stateEnemy == EnemyController.StateEnemy.Die)
+                {
+                    _player.isShoot = false;
+                    AlwaysPresent._instance.CountCoins();
+                    GamePlay._instance.CountScore();
+                    StartCoroutine(PassPillar());
+                }
+                if (_player.statePlayer == PlayerController.StatePlayer.Die)
+                {
+                    StartCoroutine(UiController._instance.FadeDisPlayGameOver());
+                }
             }
         }
     }

@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class GameHome : MonoBehaviour
 {
     [SerializeField] Button _startGamePlayBtn;
+    [SerializeField] Button _openShopBtn;
+    [SerializeField] Button _musicBtn;
+    [SerializeField] Button _soundBtn;
     private void Awake()
     {
         _startGamePlayBtn.onClick.AddListener(OpenGamePlay);
