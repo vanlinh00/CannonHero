@@ -16,7 +16,7 @@ public class GameOver : MonoBehaviour
     private void Awake()
     {
         _comebackHomeBtn.onClick.AddListener(ComeBackHome);
-        //_shopeBtn.onClick.AddListener(ComeBackHomeBtn);
+         _shopeBtn.onClick.AddListener(OpenShope);
         _replayBtn.onClick.AddListener(ReplayGame);
         //_shareBtn.onClick.AddListener(ComeBackHomeBtn);
         //_reviewBtn.onClick.AddListener(ComeBackHomeBtn);
@@ -36,7 +36,9 @@ public class GameOver : MonoBehaviour
     }
     public void OpenShope()
     {
-
+        GameController._instance.isOnShop = true;
+        UiController._instance.OpenShop();
+        CameraController._instance.GoToShop();
     }
     public void ReplayGame()
     {

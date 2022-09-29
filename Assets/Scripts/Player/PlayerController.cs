@@ -124,38 +124,4 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-  //bool isRotateUp = false;
-  //public void RotateHeadUp()
-  //  {
-  //      if(!isRotateUp)
-  //      {
-  //          StartCoroutine(FadeRotation(_headHero, 0f, 18f));
-  //          isRotateUp = true;
-  //      }  
-  //  }
-  //public void RotateHeadNormal()
-  //  {
-  //      if (isRotateUp)
-  //      {
-  //          StartCoroutine(FadeRotation(_headHero, 18f, 0f));
-  //          isRotateUp = false;
-  //      }
-  //  }
-  //  IEnumerator FadeRotation(GameObject Obj,float currentDegree, float Degree)
-  //  {
-  //      float t = currentDegree;
-  //      while (t <= Degree)
-  //      {
-  //          yield return new WaitForEndOfFrame();
-  //          t += 20.5f*Time.deltaTime;
-  //          Quaternion target = Quaternion.Euler(Obj.transform.rotation.x, Obj.transform.rotation.y,t );
-  //          Obj.transform.rotation = target;
-  //      }
-  //  }
-    //public void ResetPlayer()
-    //{
-    //    transform.position = new Vector3(-1.545f, -1.733f, 0);
-    //    _weapon.ResetRotation();
-    //}
-
 }

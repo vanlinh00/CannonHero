@@ -12,10 +12,17 @@ public class GameHome : MonoBehaviour
     private void Awake()
     {
         _startGamePlayBtn.onClick.AddListener(OpenGamePlay);
+        _openShopBtn.onClick.AddListener(OpenShop);
     }
     public void OpenGamePlay()
     {
         AlwaysPresent._instance.SetActiveTutorial(false);
         UiController._instance.OpenGamePlay();
+    }
+    public void OpenShop()
+    {
+        GameController._instance.isOnShop = true;
+        UiController._instance.OpenShop();
+        CameraController._instance.GoToShop();
     }
 }

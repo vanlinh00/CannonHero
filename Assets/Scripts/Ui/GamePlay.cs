@@ -14,11 +14,12 @@ public class GamePlay : Singleton<GamePlay>
     }
     public void PauseGame()
     {
-        Debug.Log("PauseGame");
+       UiController._instance.OpenPauseGame();
+       Time.timeScale = 0;
     }
     public void CountScore()
     {
-        GameController._instance.CountScore();
+         GameController._instance.CountScore();
         _countScore.text = GameController._instance.GetCurrentScore().ToString();
     }
 

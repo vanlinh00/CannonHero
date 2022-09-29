@@ -13,6 +13,7 @@ public class GameController : Singleton<GameController>
 
     public bool IsGameOver = false;
     [SerializeField] GameObject _camera;
+
     private bool _canClick;
     private bool _isNextCol = false;
     private int _currentScore;
@@ -24,8 +25,13 @@ public class GameController : Singleton<GameController>
     }
     private void Start()
     {
-           _isNextCol = true;
-           _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        StartCoroutine(SetGame());
+    }
+    IEnumerator SetGame()
+    {
+        yield return new WaitForEndOfFrame();
+        _isNextCol = true;
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
     private void Update()
     {
@@ -105,11 +111,9 @@ public class GameController : Singleton<GameController>
         StartCoroutine(_player.Run());
         yield return new WaitForSeconds(_player.GetTimeSpeed()*2);
     
-
         _pillarController.BonrNextNewPillar();
         _player.isRotation = false;
         _isNextCol = true;
-
 
         yield return new WaitForSeconds(0.35f);
         CoinManager._instance.AddCoinsToPool();
@@ -153,6 +157,10 @@ public class GameController : Singleton<GameController>
     public float GetAmountCoins()
     {
         return _currentCoins;
+    }
+    public PlayerController Player()
+    {
+        return _player;
     }
     //public void LoadScenceAgain()
     //{

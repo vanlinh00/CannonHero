@@ -26,19 +26,32 @@ public class ObjectPooler : Singleton<ObjectPooler>
     {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-        foreach (Pool pool in pools)
-        {
-            Queue<GameObject> queueObjectPool = new Queue<GameObject>();
+        //foreach (Pool pool in pools)
+        //{
+        //    Queue<GameObject> queueObjectPool = new Queue<GameObject>();
+        //    for (int i = 0; i < pool.size; i++)
+        //    {
+        //        GameObject obj = Instantiate(pool.prefab);
+        //        obj.transform.parent = this.transform;
+        //        obj.SetActive(false);
+        //        queueObjectPool.Enqueue(obj);
+        //    }
+        //    poolDictionary.Add(pool.tag, queueObjectPool);
+        //}
 
-            for (int i = 0; i < pool.size; i++)
-            {
-                GameObject obj = Instantiate(pool.prefab);
-                obj.transform.parent = this.transform;
-                obj.SetActive(false);
-                queueObjectPool.Enqueue(obj);
-            }
-            poolDictionary.Add(pool.tag, queueObjectPool);
+    }
+    public void CreateQueObject(int size, string tag, GameObject prefab )
+    {
+        Queue<GameObject> queueObjectPool = new Queue<GameObject>();
+
+        for (int i = 0; i < size; i++)
+        {
+            GameObject obj = Instantiate(prefab);
+            obj.transform.parent = this.transform;
+            obj.SetActive(false);
+            queueObjectPool.Enqueue(obj);
         }
+        poolDictionary.Add(tag, queueObjectPool);
     }
 
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
