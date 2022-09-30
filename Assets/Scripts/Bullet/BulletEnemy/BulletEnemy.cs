@@ -17,6 +17,7 @@ public class BulletEnemy : BaseBullet, Iflyable
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+       ObjectPooler._instance.AddElement("Bullet0", this.gameObject);
        gameObject.SetActive(false);
     }
 

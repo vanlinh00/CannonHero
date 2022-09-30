@@ -21,6 +21,7 @@ public class GameHome : MonoBehaviour
     }
     public void OpenShop()
     {
+        GameController._instance.SetActiveRegionShop(true);
         GameController._instance.isOnShop = true;
         UiController._instance.OpenShop();
         CameraController._instance.GoToShop();

@@ -10,7 +10,6 @@ public class BodyPillar : MonoBehaviour
         {
             transform.parent.parent.GetComponent<Pillar>().StateShock();
             GameController._instance.IsGameOver = true;
-            collision.gameObject.SetActive(false);
         }
     }
 }

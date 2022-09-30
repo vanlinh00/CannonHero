@@ -4,19 +4,32 @@ using UnityEngine;
 
 public class LoadData : MonoBehaviour
 {
+    [SerializeField] Vector3 _positionPlayer;
     private void OnEnable()
     {
-       StartCoroutine(WaitLoadDataWithHero());
     }
-   IEnumerator  WaitLoadDataWithHero()
+    private void Start()
     {
-        yield return new WaitForEndOfFrame();
-        int IdHero = 1; /*DataPlayer.GetInforPlayer().idHeroPlaying;*/
+        WaitLoadDataWithHero(); 
+    }
+    void  WaitLoadDataWithHero()
+    {
+        int IdHero = DataPlayer.GetInforPlayer().idHeroPlaying;
 
-        GameObject bullet = Instantiate(Resources.Load("Bullet/Bullet" + IdHero, typeof(GameObject)), transform.position, Quaternion.identity) as GameObject;
+        GameObject Player = Instantiate(Resources.Load("Hero/Hero" + IdHero, typeof(GameObject)), _positionPlayer, Quaternion.identity) as GameObject;
+
+        GameController._instance.SetupGame(Player);
+
+        GameObject bullet = Instantiate(Resources.Load("Bullet/Bullet" + 1, typeof(GameObject)), transform.position, Quaternion.identity) as GameObject;
         bullet.SetActive(false);
-        ObjectPooler._instance.CreateQueObject(1, "Bullet" + IdHero, bullet);
+        ObjectPooler._instance.CreateQueObject(1, "Bullet1", bullet);
 
+        GameObject ExplodeParticle = Instantiate(Resources.Load("Particle/Skin"+1+"/ExplodeParticle", typeof(GameObject)), transform.position, Quaternion.identity) as GameObject;
+        ExplodeParticle.SetActive(false);
+        ObjectPooler._instance.CreateQueObject(2, "ExplodePartile", ExplodeParticle);
+
+
+        //Load BackGround
         GameObject BulletEnemy = Instantiate(Resources.Load("Bullet/Bullet" + 0, typeof(GameObject)), transform.position, Quaternion.identity) as GameObject;
         BulletEnemy.SetActive(false);
         ObjectPooler._instance.CreateQueObject(1, "Bullet" + 0, BulletEnemy);
@@ -29,8 +42,5 @@ public class LoadData : MonoBehaviour
         Coin.SetActive(false);
         ObjectPooler._instance.CreateQueObject(12, "Coin", Coin);
 
-        GameObject ExplodeParticle = Instantiate(Resources.Load("Particle/Skin" + IdHero+ "/ExplodeParticle", typeof(GameObject)), transform.position, Quaternion.identity) as GameObject;
-        ExplodeParticle.SetActive(false);
-        ObjectPooler._instance.CreateQueObject(2, "ExplodePartile", ExplodeParticle);
     }
 }

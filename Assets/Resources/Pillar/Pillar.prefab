@@ -336,7 +336,7 @@ MonoBehaviour:
   _posPlayer: {x: 0.013, y: 3.591, z: 0}
   Weapon: {fileID: 891465974161011223}
   _rigidbody2D: {fileID: 0}
-  _force: 230
+  _force: 260
   _torqueSpeed: 10
   isCurrentEnemy: 1
   _posEnemy: {x: 0.013, y: 3.591, z: 0}
@@ -344,6 +344,9 @@ MonoBehaviour:
   _body: {fileID: 891465974550381952}
   _feet: {fileID: 891465974723894325}
   isBornCoin: 0
+  isHitHead: 0
+  isHitBody: 0
+  isHitFeet: 0
   _stateEnemy: 0
 --- !u!1 &891465974498832887
 GameObject:

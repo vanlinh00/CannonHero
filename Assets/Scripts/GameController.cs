@@ -13,27 +13,30 @@ public class GameController : Singleton<GameController>
 
     public bool IsGameOver = false;
     [SerializeField] GameObject _camera;
+    [SerializeField] GameObject _regionShop;
 
     private bool _canClick;
     private bool _isNextCol = false;
     private int _currentScore;
     private int _currentCoins;
     public bool isOnShop = false;
+    public bool isPause = false;
+
+    public int CountHeadShot = 0;
     protected override void Awake()
     {
         base.Awake();
     }
     private void Start()
     {
-        StartCoroutine(SetGame());
-    }
-    IEnumerator SetGame()
-    {
-        yield return new WaitForEndOfFrame();
         _isNextCol = true;
-        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        UpdateCoins();
     }
-    private void Update()
+    public void SetupGame(GameObject Player)
+    {
+        _player = Player.GetComponent<PlayerController>();
+    }
+    public void Update()
     {
         CheckCanClick();
 
@@ -65,10 +68,12 @@ public class GameController : Singleton<GameController>
                     _player.isShoot = false;
                     AlwaysPresent._instance.CountCoins();
                     GamePlay._instance.CountScore();
+                    CheckPlayerHeadShot();
                     StartCoroutine(PassPillar());
                 }
                 if (_player.statePlayer == PlayerController.StatePlayer.Die)
                 {
+                    _player.isShoot = false;
                     StartCoroutine(UiController._instance.FadeDisPlayGameOver());
                 }
             }
@@ -104,6 +109,7 @@ public class GameController : Singleton<GameController>
     {
         yield return new WaitForSeconds(0.9f);
         _player.GetWeapon().ResetRotation();
+
         // Pillar run
         _pillarController.MoveToTarget();
 
@@ -122,6 +128,7 @@ public class GameController : Singleton<GameController>
     {
         _currentPillar = _pillarController.gameObject.transform.GetChild(0).GetComponent<Pillar>();
         _currentEnemy = _currentPillar.GetEnemy().GetComponent<EnemyController>();
+        _currentEnemy.FindPositionPlayer(_player.gameObject.transform.position);
         _currentEnemy.isCurrentEnemy = true;
         IsGameOver = false;
     }
@@ -140,6 +147,7 @@ public class GameController : Singleton<GameController>
     public int AmountCoin()
     {
         int AmountCoins = 0;
+
         if (_currentEnemy.isHitHead)
         {
             AmountCoins = 7;
@@ -154,6 +162,21 @@ public class GameController : Singleton<GameController>
         }
         return AmountCoins;
     }
+    public void CheckPlayerHeadShot()
+    {
+        if(CountHeadShot==2&& !_currentEnemy.isHitHead)
+        {
+            CountHeadShot = 0;
+        }
+        if(_currentEnemy.isHitHead)
+        {
+            CountHeadShot++;
+        }
+        if(CountHeadShot>=1)
+        {
+            _player.GetWeapon().isFiver = true;
+        }
+    }
     public float GetAmountCoins()
     {
         return _currentCoins;
@@ -162,6 +185,24 @@ public class GameController : Singleton<GameController>
     {
         return _player;
     }
+    public void ResurrectPlayer()
+    {
+        IsGameOver = false;
+        _currentEnemy.GetWeapon().ResetRotation();
+        _player.isRotation = false;
+        _isNextCol = true;
+        _player.RecurrectPlayer();
+    }
+    public void SetActiveRegionShop(bool res)
+    {
+        _regionShop.SetActive(res);
+    }
+    public void UpdateCoins()
+    {
+        _currentCoins = 10000;
+        DataPlayer.UpdateAmountCoins(_currentCoins);
+    }
+
     //public void LoadScenceAgain()
     //{
     //    _pillarController.ResetPillarController();

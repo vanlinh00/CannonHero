@@ -4796,7 +4796,7 @@ GameObject:
   - component: {fileID: 4913562973767374613}
   - component: {fileID: 1829063165527612453}
   - component: {fileID: 5701240237445543035}
-  - component: {fileID: 3329459048589068775}
+  - component: {fileID: 6248932232965961242}
   m_Layer: 0
   m_Name: Bullet1
   m_TagString: Bullet
@@ -4883,6 +4883,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9e9f43e5d6e47140a0a2642d224fd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateBullet: 0
   rigidbody: {fileID: 5701240237445543035}
   bulletSpeed: 0
   _exploteParticle: {fileID: 550939780671781429}
@@ -4907,8 +4908,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!61 &3329459048589068775
-BoxCollider2D:
+--- !u!60 &6248932232965961242
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4920,7 +4921,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.033866614, y: 0.010160387}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -4930,9 +4931,25 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.64709216, y: 0.20613274}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.20386833, y: 0.069401816}
+      - {x: 0.2658649, y: 0.0899079}
+      - {x: 0.18336436, y: 0.07418757}
+      - {x: 0.21113294, y: 0.051140293}
+      - {x: 0.17189163, y: 0.03921727}
+      - {x: 0.14134485, y: 0.038039334}
+      - {x: 0.23928604, y: 0.08802782}
+      - {x: 0.058261335, y: 0.002745783}
+      - {x: 0.17279288, y: -0.05304341}
+      - {x: 0.29466793, y: -0.0037068464}
+      - {x: 0.2975245, y: -0.0038274191}
+      - {x: 0.28525966, y: -0.039773494}
+      - {x: 0.3117619, y: -0.0054230765}
+      - {x: 0.3121408, y: 0.012705125}
+      - {x: 0.31528574, y: -0.0016248673}
+      - {x: 0.29644328, y: 0.057235163}
+      - {x: 0.2629974, y: 0.09709378}
 --- !u!1 &9217650577543286284
 GameObject:
   m_ObjectHideFlags: 0

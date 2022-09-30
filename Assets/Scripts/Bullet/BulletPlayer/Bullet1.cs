@@ -5,7 +5,10 @@ using UnityEngine;
 public class Bullet1 : BulletPlayer,Iflyable
 {
     [SerializeField] GameObject _exploteParticle;
-
+    protected override void Start()
+    {
+        base.Start();
+    }
     public void Fly()
     {
         rigidbody = gameObject.GetComponent<Rigidbody2D>();

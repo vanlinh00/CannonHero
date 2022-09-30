@@ -24,6 +24,7 @@ public class EnemyController : MonoBehaviour
     public bool isHitBody;
     public bool isHitFeet;
 
+    public PlayerController _player;
     public enum StateEnemy
     {
         Living,
@@ -35,19 +36,31 @@ public class EnemyController : MonoBehaviour
         isHitHead = false;
         isHitBody = false;
         isHitFeet = false;
-
         isBornCoin = true;
         isCurrentEnemy = false;
         _weapon = Weapon.GetComponent<Weapon>();
-        _posPlayer = GameObject.FindGameObjectWithTag("Player").transform.position;
+        StartCoroutine(WaitTimeForUpdatePlayer());
+    }
+    IEnumerator WaitTimeForUpdatePlayer()
+    {
+        yield return new WaitForEndOfFrame();
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
     private void Update()
     {
-        if (GameController._instance.IsGameOver&& isCurrentEnemy&& _stateEnemy!=StateEnemy.Die)
+        if (GameController._instance.IsGameOver)
         {
-            isCurrentEnemy = false;
-            Shoot();
+            if (_player.statePlayer != PlayerController.StatePlayer.Die&& isCurrentEnemy && _stateEnemy != StateEnemy.Die)
+            {
+                isCurrentEnemy = false;
+                Shoot();
+            }
         }
+       
+    }
+   public void FindPositionPlayer(Vector3 PosPlayer)
+    {
+        _posPlayer = PosPlayer;
     }
    public void Die()
     {

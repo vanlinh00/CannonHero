@@ -16,18 +16,21 @@ public class Weapon : MonoBehaviour
     [SerializeField] float _bulletForce;
     public float idBullet;
     public float lifeTimeBullet;
+    public bool isFiver=false;
 
     //snatch gun
     [SerializeField] float _speedSnatch;
     [SerializeField] Vector3 _targetPos;
     [SerializeField] Vector3 _currentPos;
+
+
     public void AutoRotate()
     {
         _target = Quaternion.Euler(transform.rotation.x, transform.rotation.y, currentAngleZ);
         currentAngleZ = currentAngleZ + Time.deltaTime * _speedRotate;
         transform.rotation = _target;
     }
-    public void Shoot()
+    public void Shoot   ()
     {
         StartCoroutine(WaitShoot());
     }
@@ -36,12 +39,24 @@ public class Weapon : MonoBehaviour
         _particleFirePoint.SetActive(true);
         _bullet = ObjectPooler._instance.SpawnFromPool("Bullet" + idBullet, PosFirePoint(), _target);
         BaseBullet baseBullet = _bullet.GetComponent<BaseBullet>();
+
+        if (isFiver)
+        {
+            baseBullet.stateBullet = BaseBullet.StateBullet.Fiver;
+        }
+        else
+        {
+            baseBullet.stateBullet = BaseBullet.StateBullet.Normal;
+        }
+        baseBullet.SetUp();
+
         baseBullet.bulletSpeed = _bulletForce;
         baseBullet.GetComponent<Iflyable>().Fly();
         StartCoroutine(Snatch());
         yield return new WaitForSeconds(1f);
         _particleFirePoint.SetActive(false);
     }
+
     public Vector3 PosFirePoint()
     {
         return _firePoint.transform.position; 

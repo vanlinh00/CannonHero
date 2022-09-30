@@ -18,6 +18,7 @@ public class DataPlayer
                 isOnAudio = true,
                 listIdHero = new List<int>() { 1 },
                 idHeroPlaying = 1,
+                countCoins = 0,
 
             };
             SaveData();
@@ -36,6 +37,11 @@ public class DataPlayer
     public static void UpdateBestScore(int Score)
     {
         inforPlayer.bestScore = Score;
+        SaveData();
+    }
+    public static void UpdateAmountCoins(int Amount)
+    {
+        inforPlayer.countCoins = Amount;
         SaveData();
     }
     public static void ChangeStateAudio(bool IsOnAudio)
@@ -65,4 +71,5 @@ public class InforPlayer
     public bool isOnAudio;
     public List<int> listIdHero;
     public int idHeroPlaying;
+    public int countCoins;
 }

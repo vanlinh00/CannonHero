@@ -15,7 +15,8 @@ public class GamePlay : Singleton<GamePlay>
     public void PauseGame()
     {
        UiController._instance.OpenPauseGame();
-       Time.timeScale = 0;
+       GameController._instance.isPause = true;
+        Time.timeScale = 0;
     }
     public void CountScore()
     {
