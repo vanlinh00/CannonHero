@@ -72,7 +72,6 @@ public class UiController : Singleton<UiController>
     }   
     public void OpenShop()
     {
-        Debug.Log("Open Shope");
         _gamOverPanel.SetActive(false);
         _gameHomePanel.SetActive(false);
         _gamePlayPanel.SetActive(false);

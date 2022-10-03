@@ -35,10 +35,20 @@ public class Pillar : MonoBehaviour
     }
     public void BonrNewCoinOnPillar(Vector3 PosCoin)
     {
-     List<GameObject> ListCoins = CoinManager._instance.BonrCoins(GameController._instance.AmountCoin(), PosCoin);
+     List<GameObject> ListCoins = ItemManager._instance.BonrCoins(GameController._instance.AmountCoin(), PosCoin);
+
       foreach(GameObject Coin in ListCoins)
         {
             Coin.transform.parent = transform;
+        }
+    }
+    public void BornDiamond(Vector3 PosDiamond)
+    {
+        List<GameObject> ListDiamond = ItemManager._instance.BornDiamonds(4, PosDiamond);
+
+        foreach (GameObject Diamond in ListDiamond)
+        {
+            Diamond.transform.parent = transform;
         }
     }
     public void StateShock()

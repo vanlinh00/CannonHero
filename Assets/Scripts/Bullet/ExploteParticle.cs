@@ -6,12 +6,14 @@ public class ExploteParticle : MonoBehaviour
 {
     private void OnEnable()
     {
+        Debug.Log("ExploteParticle");
         StartCoroutine(WaitTimeDisable());
     }
     IEnumerator WaitTimeDisable()
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(1f);
         ObjectPooler._instance.AddElement("ExplodePartile", gameObject);
         this.gameObject.SetActive(false);
     }
+
 }

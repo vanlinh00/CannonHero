@@ -2,17 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponEnemy : MonoBehaviour
+public class WeaponEnemy : Weapon
 {
-    // Start is called before the first frame update
-    void Start()
+    public void Shoot()
     {
-        
+        StartCoroutine(WaitShoot());
+    }
+    IEnumerator WaitShoot()
+    {
+        _particleFirePoint.SetActive(true);
+        _bullet = ObjectPooler._instance.SpawnFromPool("Bullet" + idBullet, PosFirePoint(), _target);
+        BulletEnemy bulletEnemy = _bullet.GetComponent<BulletEnemy>();
+        bulletEnemy.bulletSpeed = _bulletForce;
+        yield return new WaitForSeconds(1f);
+        _particleFirePoint.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    public IEnumerator FadeRotateToTarget(float currentDegree, float TargetDegree)
     {
-        
+        float t = currentDegree;
+        while (t <= TargetDegree)
+        {
+            yield return new WaitForEndOfFrame();
+            t += base._speedRotate * Time.deltaTime;
+            Quaternion target = Quaternion.Euler(transform.rotation.x, transform.rotation.y, (t < TargetDegree) ? t : TargetDegree);
+            transform.rotation = target;
+        }
     }
 }

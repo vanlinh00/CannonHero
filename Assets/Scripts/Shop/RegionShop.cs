@@ -6,7 +6,6 @@ public class RegionShop : Singleton<RegionShop>
 {
     [SerializeField] GameObject _positionAllHeroSelect;
     [SerializeField] GameObject _currentHeroLoading;
-
     protected override void Awake()
     {
         base.Awake();

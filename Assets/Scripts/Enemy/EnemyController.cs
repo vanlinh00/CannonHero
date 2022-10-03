@@ -9,7 +9,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] Rigidbody2D _rigidbody2D;
     [SerializeField] float _force;
     [SerializeField] float _torqueSpeed;
-    private Weapon _weapon;
+    private WeaponEnemy _weapon;
     public bool isCurrentEnemy;
     public Vector3 _posEnemy;
 
@@ -38,7 +38,7 @@ public class EnemyController : MonoBehaviour
         isHitFeet = false;
         isBornCoin = true;
         isCurrentEnemy = false;
-        _weapon = Weapon.GetComponent<Weapon>();
+        _weapon = Weapon.GetComponent<WeaponEnemy>();
         StartCoroutine(WaitTimeForUpdatePlayer());
     }
     IEnumerator WaitTimeForUpdatePlayer()
@@ -68,6 +68,10 @@ public class EnemyController : MonoBehaviour
         {
             Vector3 PosCoin = new Vector3(_head.transform.position.x, _head.transform.position.y + 0.2f, 0f);
             gameObject.transform.parent.transform.parent.GetComponent<Pillar>().BonrNewCoinOnPillar(PosCoin);
+            if (GameController._instance.IsFever)
+            {
+                gameObject.transform.parent.transform.parent.GetComponent<Pillar>().BornDiamond(PosCoin);
+            }
             isBornCoin = false;
         }
         _stateEnemy = StateEnemy.Die;
@@ -90,7 +94,6 @@ public class EnemyController : MonoBehaviour
     {
         Destroy(gameObject.GetComponent<Rigidbody2D>());
     }
-
     void WeaPonRotateToPlayer()
     {
         Vector3 VectorA = _weapon.PosFirePoint() -Weapon.transform.position;
@@ -116,7 +119,7 @@ public class EnemyController : MonoBehaviour
     {
         isBornCoin = true;
         isCurrentEnemy = false;
-        _weapon = Weapon.GetComponent<Weapon>();
+        _weapon = Weapon.GetComponent<WeaponEnemy>();
         _posPlayer = GameObject.FindGameObjectWithTag("Player").transform.position;
 
         _stateEnemy = StateEnemy.Living;

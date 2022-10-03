@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class PlayerController :MonoBehaviour
 {
     [SerializeField] GameObject Weapon;
     [SerializeField] GameObject ParticleDead;
 
-    private Weapon _weapon;
+    private WeaponPlayer _weapon;
     public bool isRotation = false;
     public bool isShoot = false;
     private Rigidbody2D _rbComponentPlayer;
@@ -27,6 +26,9 @@ public class PlayerController :MonoBehaviour
     // Rotate Head
     public bool isRotateHead = false;
 
+    public bool isMove = false;
+
+    [SerializeField] float _speed;
     public enum StatePlayer
     {
         Living,
@@ -39,9 +41,10 @@ public class PlayerController :MonoBehaviour
     {
         _localPosComponent = new List<Vector3>();
         StateIdle();
-        _weapon = Weapon.GetComponent<Weapon>();
+        _weapon = Weapon.GetComponent<WeaponPlayer>();
     }
-    public Weapon GetWeapon()
+
+    public WeaponPlayer GetWeapon()
     {
         return _weapon;
     }
@@ -64,7 +67,6 @@ public class PlayerController :MonoBehaviour
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
             _animator.enabled = false;
             ParticleDead.SetActive(true);
-
             BreakObjectInPlayer();
         }
     }
@@ -89,7 +91,7 @@ public class PlayerController :MonoBehaviour
             if (_objectComponentPlayer[i].GetComponent<Rigidbody2D>() != null)
             {   
                 _objectComponentPlayer[i].GetComponent<SpriteRenderer>().color = new Color(255, 255,255,255);
-                Destroy(_objectComponentPlayer[i].GetComponent<Rigidbody2D>());
+                 Destroy(_objectComponentPlayer[i].GetComponent<Rigidbody2D>());
                 _objectComponentPlayer[i].transform.localPosition = _localPosComponent[i];
                 _objectComponentPlayer[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
             }
@@ -152,6 +154,14 @@ public class PlayerController :MonoBehaviour
             CurrentTransform.position = current;
             yield return null;
         }
+        //while(true)
+        //{
+        //    if (isMove)
+        //    {
+        //        var step = _speed * Time.deltaTime;
+        //        transform.position = Vector3.MoveTowards(transform.position, _target, step);
+        //    }
+        //}
     }
 
 }

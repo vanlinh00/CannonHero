@@ -23,6 +23,8 @@ public class GameController : Singleton<GameController>
     public bool isPause = false;
 
     public int CountHeadShot = 0;
+    private bool isShowGameOver = false;
+    public bool IsFever = false;
     protected override void Awake()
     {
         base.Awake();
@@ -30,7 +32,6 @@ public class GameController : Singleton<GameController>
     private void Start()
     {
         _isNextCol = true;
-        UpdateCoins();
     }
     public void SetupGame(GameObject Player)
     {
@@ -62,15 +63,21 @@ public class GameController : Singleton<GameController>
             }
 
             if (_player.isShoot)
-            {
+            {   
+                if (IsGameOver&& !isShowGameOver)
+                {
+                    AlwaysPresent._instance.DisplayNoti("Miss");
+                    isShowGameOver = true;
+                }
+
                 if (_currentEnemy._stateEnemy == EnemyController.StateEnemy.Die)
                 {
                     _player.isShoot = false;
-                    AlwaysPresent._instance.CountCoins();
                     GamePlay._instance.CountScore();
                     CheckPlayerHeadShot();
                     StartCoroutine(PassPillar());
                 }
+
                 if (_player.statePlayer == PlayerController.StatePlayer.Die)
                 {
                     _player.isShoot = false;
@@ -122,7 +129,7 @@ public class GameController : Singleton<GameController>
         _isNextCol = true;
 
         yield return new WaitForSeconds(0.35f);
-        CoinManager._instance.AddCoinsToPool();
+        ItemManager._instance.AddCoinsToPool();
     }
     public void UpDatePassPillar()
     {
@@ -142,7 +149,11 @@ public class GameController : Singleton<GameController>
     }
     public void CountCoins()
     {
-        _currentCoins += AmountCoin();
+        _currentCoins++;
+    }
+    public int GetCurrentCoins()
+    {
+        return _currentCoins;
     }
     public int AmountCoin()
     {
@@ -164,17 +175,24 @@ public class GameController : Singleton<GameController>
     }
     public void CheckPlayerHeadShot()
     {
-        if(CountHeadShot==2&& !_currentEnemy.isHitHead)
-        {
-            CountHeadShot = 0;
-        }
-        if(_currentEnemy.isHitHead)
+        _player.GetWeapon().isFiver = false;
+        IsFever = false;
+        if (_currentEnemy.isHitHead)
         {
             CountHeadShot++;
+            AlwaysPresent._instance.DisplayNoti("HEADSHOT +2PTS");
+            if (CountHeadShot==3)
+            {
+                AlwaysPresent._instance.DisplayNotiFeVer("FEVER");
+                _player.GetWeapon().isFiver = true;
+                IsFever = true;
+                CountHeadShot = 0;
+            }
         }
-        if(CountHeadShot>=1)
+        else
         {
-            _player.GetWeapon().isFiver = true;
+            AlwaysPresent._instance.DisplayNoti("+1PTS");
+            CountHeadShot = 0;
         }
     }
     public float GetAmountCoins()
@@ -199,8 +217,8 @@ public class GameController : Singleton<GameController>
     }
     public void UpdateCoins()
     {
-        _currentCoins = 10000;
-        DataPlayer.UpdateAmountCoins(_currentCoins);
+        //_currentCoins = 10000;
+      ///  DataPlayer.UpdateAmountCoins(_currentCoins);
     }
 
     //public void LoadScenceAgain()

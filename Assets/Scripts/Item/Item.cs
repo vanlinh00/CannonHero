@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class Item : MonoBehaviour
 {
     private Rigidbody2D _rigidbody2D;
     [SerializeField] float _force;
-    [SerializeField] SpriteRenderer _spriteRenderer;
+
     [SerializeField] Animator _animator;
-    [SerializeField] PhysicsMaterial2D _bouncy;
 
     private void OnEnable()
     {
@@ -18,6 +17,7 @@ public class Coin : MonoBehaviour
     public void AddForce()
     {
         float x = 0f;
+
         if (Random.RandomRange(1, 3) == 2)
         {
             x = Random.RandomRange(-0.1f, -0.09f);
@@ -38,14 +38,14 @@ public class Coin : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Wall"))
         {
+            AlwaysPresent._instance.CountCoins();
             GetComponent<CircleCollider2D>().enabled = false;
             StartCoroutine(WaitAddToPool());
-
-        }else if(collision.gameObject.CompareTag("BodyPlayer")|| collision.gameObject.CompareTag("Coin"))
-        {
+ 
+        }//else if(collision.gameObject.CompareTag("BodyPlayer")|| collision.gameObject.CompareTag("Coin"))
+        //{
         
-        }
-       
+        //}
     }
    IEnumerator WaitAddToPool()
     {

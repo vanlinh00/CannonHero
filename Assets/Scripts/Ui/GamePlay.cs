@@ -21,7 +21,7 @@ public class GamePlay : Singleton<GamePlay>
     public void CountScore()
     {
          GameController._instance.CountScore();
-        _countScore.text = GameController._instance.GetCurrentScore().ToString();
+        _countScore.GetComponent<Score>().CountScore();
     }
 
 }

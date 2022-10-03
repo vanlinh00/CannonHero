@@ -4883,10 +4883,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9e9f43e5d6e47140a0a2642d224fd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateBullet: 0
   rigidbody: {fileID: 5701240237445543035}
   bulletSpeed: 0
+  _localScale: {x: 0.4, y: 0.4, z: 0}
+  stateBullet: 0
   _exploteParticle: {fileID: 550939780671781429}
+  _idBullet: 1
 --- !u!50 &5701240237445543035
 Rigidbody2D:
   serializedVersion: 4

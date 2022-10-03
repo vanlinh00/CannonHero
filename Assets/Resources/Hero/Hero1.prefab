@@ -26,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5419283872078952754}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.695, y: -1.748, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -59,13 +59,14 @@ MonoBehaviour:
   - {fileID: 9071947236751913543}
   - {fileID: 9071947236150703095}
   _torqueSpeed: 1200
-  _force: 250
+  _force: 200
   _animator: {fileID: 9071947235490466395}
   _speedMove: 1
   _targetPos: {x: -0.439, y: -1.748, z: 0}
   _currentPos: {x: -1.695, y: -1.748, z: 0}
-  _headHero: {fileID: 9071947235796787383}
   isRotateHead: 0
+  isMove: 0
+  _speed: 0
   statePlayer: 0
 --- !u!50 &5419283872078952752
 Rigidbody2D:
@@ -903,7 +904,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9071947236859309759}
-  - component: {fileID: 9071947236859309758}
+  - component: {fileID: 583021544}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
@@ -927,7 +928,7 @@ Transform:
   m_Father: {fileID: 9071947235490466397}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9071947236859309758
+--- !u!114 &583021544
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -936,7 +937,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9071947236859309752}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ec0a07f9a4cc17449f29ba82d777e44, type: 3}
+  m_Script: {fileID: 11500000, guid: be92c684cb224bd4fb73c5410ab79ebc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _speedRotate: 71
@@ -946,7 +947,7 @@ MonoBehaviour:
   _bullet: {fileID: 0}
   _bulletForce: 11
   idBullet: 1
-  lifeTimeBullet: 0.4
+  isFiver: 0
   _speedSnatch: 0.1
   _targetPos: {x: 0, y: 0, z: 0}
   _currentPos: {x: 0, y: 0, z: 0}

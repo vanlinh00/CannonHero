@@ -52,8 +52,8 @@ public class ManagerShopHero : Singleton<ManagerShopHero>
         _currentDarkClickBtn.SetActive(false);
     }
     private void CheckBuyHero()
-    {  
-        int AmountCoins = DataPlayer.GetInforPlayer().countCoins;
+    {
+        int AmountCoins = 10000; /*DataPlayer.GetInforPlayer().countCoins;*/
 
         if(AmountCoins>=_priceHeroSelect)
         {

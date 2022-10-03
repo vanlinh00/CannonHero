@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4263417015616460351}
   - component: {fileID: 4263417015616460344}
-  - component: {fileID: 4263417015616460350}
   - component: {fileID: 4263417015616460349}
   - component: {fileID: 4263417015616460348}
   - component: {fileID: 1189191079}
+  - component: {fileID: 974541200412180878}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Coin
@@ -85,22 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &4263417015616460350
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4263417015616460346}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 0042f713a85410c40a62786cac372e59, type: 2}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.15
 --- !u!114 &4263417015616460349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,9 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _force: 400
-  _spriteRenderer: {fileID: 0}
   _animator: {fileID: 4263417015616460348}
-  _bouncy: {fileID: 6200000, guid: 0042f713a85410c40a62786cac372e59, type: 2}
 --- !u!95 &4263417015616460348
 Animator:
   serializedVersion: 3
@@ -157,3 +139,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!58 &974541200412180878
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4263417015616460346}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 0042f713a85410c40a62786cac372e59, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.15
