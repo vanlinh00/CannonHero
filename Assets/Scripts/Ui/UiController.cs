@@ -40,11 +40,19 @@ public class UiController : Singleton<UiController>
 
     public void OpenGamePlay()
     {
-        _gameHomePanel.SetActive(false);
+        StartCoroutine(DisableGameHome());
         _shopPanel.SetActive(false);
         _pauseGamePanel.SetActive(false);
         _gamOverPanel.SetActive(false);
+
+        _gamePlayPanel.GetComponent<GamePlay>().In();
         _gamePlayPanel.SetActive(true);
+    }
+    IEnumerator DisableGameHome()
+    {
+        _gameHomePanel.GetComponent<GameHome>().Out();
+        yield return new WaitForSeconds(0.50f);
+        _gameHomePanel.SetActive(false);
     }
     public void OpenGameHome()
     {
@@ -52,14 +60,21 @@ public class UiController : Singleton<UiController>
         _pauseGamePanel.SetActive(false);
         _gamOverPanel.SetActive(false);
         _gamePlayPanel.SetActive(false);
+        _gameHomePanel.GetComponent<GameHome>().In();
         _gameHomePanel.SetActive(true);
     }
+    
     public void OpenGameOver()
     {
         _shopPanel.SetActive(false);
         _gameHomePanel.SetActive(false);
         _pauseGamePanel.SetActive(false);
         _gamePlayPanel.SetActive(false);
+        StartCoroutine(WaitEnableGameOver());
+    }
+    IEnumerator WaitEnableGameOver()
+    {
+        yield return new WaitForSeconds(0.9f);
         _gamOverPanel.SetActive(true);
     }
     public void OpenPauseGame()

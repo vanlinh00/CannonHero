@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class PlayerController :MonoBehaviour
@@ -25,10 +26,6 @@ public class PlayerController :MonoBehaviour
 
     // Rotate Head
     public bool isRotateHead = false;
-
-    public bool isMove = false;
-
-    [SerializeField] float _speed;
     public enum StatePlayer
     {
         Living,
@@ -36,14 +33,40 @@ public class PlayerController :MonoBehaviour
     }
 
     public StatePlayer statePlayer;
+    public bool isEnableTrail=true;
 
+    public bool isMove = false;
+    [SerializeField] float _moveTime;
+    public Vector3 target;
+    public bool isEnableStateIdle = true;
     private void Start()
     {
         _localPosComponent = new List<Vector3>();
         StateIdle();
         _weapon = Weapon.GetComponent<WeaponPlayer>();
     }
-
+    private void FixedUpdate()
+    {
+        if (isMove)
+        {
+            var step = _moveTime * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, target, step);
+            if (Vector3.Distance(transform.position, target) == 0f)
+            {
+                isMove = false;
+                isEnableStateIdle = true;
+                isEnableTrail = true;
+            }
+        }
+        else
+        {
+            if (isEnableStateIdle)
+            {
+                StateIdle();
+                isEnableStateIdle = false;
+            }
+        }
+    }
     public WeaponPlayer GetWeapon()
     {
         return _weapon;
@@ -52,9 +75,16 @@ public class PlayerController :MonoBehaviour
     {   
         if( _weapon.currentAngleZ <= 90.3f)
         {
+            if (isEnableTrail)
+            {
+               GetWeapon().SetEnableTrail();
+
+                isEnableTrail = false;
+            }
             _weapon.AutoRotate();
         }
     }
+
     public void WeaponShoot()
     {
        _weapon.Shoot();
@@ -129,39 +159,16 @@ public class PlayerController :MonoBehaviour
         _animator.SetBool("IsRun", false);
         _animator.SetBool("RotateHead", true);
     }   
-   public IEnumerator Run()
+
+    public void MoveToNextPillar()
     {
+        isMove = true;
         StateRun();
-        StartCoroutine(Move(transform, _targetPos, _speedMove));
-        yield return new WaitForSeconds(_speedMove);
-        StartCoroutine(Move(transform, _currentPos, _speedMove));
-        yield return new WaitForSeconds(_speedMove);
-        StateIdle();
     }
     public float GetTimeSpeed()
     {
         return _speedMove;
     }
-    IEnumerator Move(Transform CurrentTransform, Vector3 Target, float TotalTime)
-    {
-        var passed = 0f;
-        var init = CurrentTransform.transform.position;
-        while (passed < TotalTime)
-        {
-            passed += Time.deltaTime;
-            var normalized = passed / TotalTime;
-            var current = Vector3.Lerp(init, Target, normalized);
-            CurrentTransform.position = current;
-            yield return null;
-        }
-        //while(true)
-        //{
-        //    if (isMove)
-        //    {
-        //        var step = _speed * Time.deltaTime;
-        //        transform.position = Vector3.MoveTowards(transform.position, _target, step);
-        //    }
-        //}
-    }
+
 
 }

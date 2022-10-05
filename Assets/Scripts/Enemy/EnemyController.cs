@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] Vector3 _posPlayer;
     [SerializeField] GameObject Weapon;
     [SerializeField] Rigidbody2D _rigidbody2D;
     [SerializeField] float _force;
@@ -37,9 +36,12 @@ public class EnemyController : MonoBehaviour
         isHitBody = false;
         isHitFeet = false;
         isBornCoin = true;
-        isCurrentEnemy = false;
         _weapon = Weapon.GetComponent<WeaponEnemy>();
         StartCoroutine(WaitTimeForUpdatePlayer());
+    }
+    private void Awake()
+    {
+        isCurrentEnemy = false;
     }
     IEnumerator WaitTimeForUpdatePlayer()
     {
@@ -58,19 +60,16 @@ public class EnemyController : MonoBehaviour
         }
        
     }
-   public void FindPositionPlayer(Vector3 PosPlayer)
-    {
-        _posPlayer = PosPlayer;
-    }
+
    public void Die()
     {
         if(isBornCoin)
         {
             Vector3 PosCoin = new Vector3(_head.transform.position.x, _head.transform.position.y + 0.2f, 0f);
-            gameObject.transform.parent.transform.parent.GetComponent<Pillar>().BonrNewCoinOnPillar(PosCoin);
+            gameObject.transform.parent.transform.parent.GetComponent<Pillar>().BornCoins(PosCoin);
             if (GameController._instance.IsFever)
             {
-                gameObject.transform.parent.transform.parent.GetComponent<Pillar>().BornDiamond(PosCoin);
+                gameObject.transform.parent.transform.parent.GetComponent<Pillar>().BornDiamonds(PosCoin);
             }
             isBornCoin = false;
         }
@@ -97,7 +96,7 @@ public class EnemyController : MonoBehaviour
     void WeaPonRotateToPlayer()
     {
         Vector3 VectorA = _weapon.PosFirePoint() -Weapon.transform.position;
-        Vector3 VectorB = _posPlayer-Weapon.transform.position;
+        Vector3 VectorB = _player.transform.position - Weapon.transform.position;
         float angle = Vector2.Angle(VectorA, VectorB);
         StartCoroutine(_weapon.FadeRotateToTarget(0, angle));
     }
@@ -120,7 +119,6 @@ public class EnemyController : MonoBehaviour
         isBornCoin = true;
         isCurrentEnemy = false;
         _weapon = Weapon.GetComponent<WeaponEnemy>();
-        _posPlayer = GameObject.FindGameObjectWithTag("Player").transform.position;
 
         _stateEnemy = StateEnemy.Living;
         transform.localPosition = _posEnemy;

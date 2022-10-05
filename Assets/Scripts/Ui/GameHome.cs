@@ -9,6 +9,8 @@ public class GameHome : MonoBehaviour
     [SerializeField] Button _openShopBtn;
     [SerializeField] Button _musicBtn;
     [SerializeField] Button _soundBtn;
+
+    [SerializeField] Animator _animator;
     private void Awake()
     {
         _startGamePlayBtn.onClick.AddListener(OpenGamePlay);
@@ -25,5 +27,13 @@ public class GameHome : MonoBehaviour
         GameController._instance.isOnShop = true;
         UiController._instance.OpenShop();
         CameraController._instance.GoToShop();
+    }
+    public void In()
+    {
+        _animator.SetBool("out", false);
+    }
+    public void Out()
+    {
+        _animator.SetBool("out", true);
     }
 }

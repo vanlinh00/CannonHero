@@ -33,7 +33,7 @@ public class Pillar : MonoBehaviour
     {
         _bodyPillar.GetComponent<PolygonCollider2D>().enabled = Res;
     }
-    public void BonrNewCoinOnPillar(Vector3 PosCoin)
+    public void BornCoins(Vector3 PosCoin)
     {
      List<GameObject> ListCoins = ItemManager._instance.BonrCoins(GameController._instance.AmountCoin(), PosCoin);
 
@@ -42,7 +42,7 @@ public class Pillar : MonoBehaviour
             Coin.transform.parent = transform;
         }
     }
-    public void BornDiamond(Vector3 PosDiamond)
+    public void BornDiamonds(Vector3 PosDiamond)
     {
         List<GameObject> ListDiamond = ItemManager._instance.BornDiamonds(4, PosDiamond);
 

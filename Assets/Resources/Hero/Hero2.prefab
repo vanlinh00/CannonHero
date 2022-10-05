@@ -65,7 +65,7 @@ MonoBehaviour:
   _targetPos: {x: -0.439, y: -1.748, z: 0}
   _currentPos: {x: -1.695, y: -1.748, z: 0}
   isRotateHead: 0
-  isMove: 0
+  _moveAnimator: {fileID: 0}
   _speed: 0
   statePlayer: 0
 --- !u!50 &6080549621130155308

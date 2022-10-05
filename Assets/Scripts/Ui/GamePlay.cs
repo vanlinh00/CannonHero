@@ -7,6 +7,7 @@ public class GamePlay : Singleton<GamePlay>
 {
     [SerializeField] Button _pauseBtn;
     [SerializeField] Text _countScore;
+    [SerializeField] Animator _animator;
     protected override void Awake()
     {
         base.Awake();
@@ -23,5 +24,12 @@ public class GamePlay : Singleton<GamePlay>
          GameController._instance.CountScore();
         _countScore.GetComponent<Score>().CountScore();
     }
-
+    public void In()
+    {
+        _animator.SetBool("out", false);
+    }
+    public void Out()
+    {
+        _animator.SetBool("out", true);
+    }
 }

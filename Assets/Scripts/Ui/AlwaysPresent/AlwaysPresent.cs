@@ -5,11 +5,9 @@ using UnityEngine.UI;
 
 public class AlwaysPresent : Singleton<AlwaysPresent>
 {
-    [SerializeField] GameObject _tutorialTxt;
-
+    [SerializeField] GameObject _tutorialObj;
     [SerializeField] GameObject _notification;
     [SerializeField] GameObject _notificationFiver;
-
     [SerializeField] CoinOfPlayer _coinOfPlayer;
     protected override void Awake()
     {
@@ -18,8 +16,9 @@ public class AlwaysPresent : Singleton<AlwaysPresent>
 
     public void SetActiveTutorial(bool res)
     {
-        _tutorialTxt.SetActive(res);
+        _tutorialObj.SetActive(res);
     }
+
     public void CountCoins()
     {
         _coinOfPlayer.CountCoins();
@@ -35,6 +34,4 @@ public class AlwaysPresent : Singleton<AlwaysPresent>
         _notificationFiver.GetComponent<Notification>().notificationTxt.text = NotiTxt.ToString();
         _notificationFiver.gameObject.SetActive(true);
     }
-
-
 }

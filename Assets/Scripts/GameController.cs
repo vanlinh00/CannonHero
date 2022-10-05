@@ -36,6 +36,8 @@ public class GameController : Singleton<GameController>
     public void SetupGame(GameObject Player)
     {
         _player = Player.GetComponent<PlayerController>();
+        _currentEnemy = _pillarController.GetFristPillar().GetComponent<Pillar>().GetEnemy().GetComponent<EnemyController>();
+        _currentEnemy.isCurrentEnemy = true;
     }
     public void Update()
     {
@@ -45,7 +47,7 @@ public class GameController : Singleton<GameController>
         {
             return;
         }
-        if(!isOnShop)
+        if(!isOnShop&&!_player.isMove)
         {
             if (Input.GetMouseButton(0) && !_player.isRotation && _isNextCol)
             {
@@ -56,26 +58,32 @@ public class GameController : Singleton<GameController>
             {
                 _isNextCol = false;
                 _player.isShoot = true;
-                _player.WeaponShoot();
                 _player.isRotation = true;
                 _player.isRotateHead = false;
-                UpDatePassPillar();
+                _player.GetWeapon().ClearTrail();
+                _player.WeaponShoot();
+            
             }
-
             if (_player.isShoot)
             {   
                 if (IsGameOver&& !isShowGameOver)
                 {
                     AlwaysPresent._instance.DisplayNoti("Miss");
                     isShowGameOver = true;
+         
                 }
-
                 if (_currentEnemy._stateEnemy == EnemyController.StateEnemy.Die)
                 {
                     _player.isShoot = false;
                     GamePlay._instance.CountScore();
-                    CheckPlayerHeadShot();
-                    StartCoroutine(PassPillar());
+
+                    UpdateNoti();
+                    UpdatePlayer();
+                    _player.MoveToNextPillar();
+                    StartCoroutine(WaitTimePlayerMoveToNextPillar());
+                    StartCoroutine(WaitTimeAddItimetimeToPool());
+                    StartCoroutine(WaitTimeAddBornPillar());
+                    UpdateCurrentEnemy();
                 }
 
                 if (_player.statePlayer == PlayerController.StatePlayer.Die)
@@ -112,36 +120,48 @@ public class GameController : Singleton<GameController>
         }
     }
   
-    IEnumerator PassPillar()
+    IEnumerator WaitTimePlayerMoveToNextPillar()
     {
         yield return new WaitForSeconds(0.9f);
-        _player.GetWeapon().ResetRotation();
-
-        // Pillar run
-        _pillarController.MoveToTarget();
-
-        // Play run
-        StartCoroutine(_player.Run());
-        yield return new WaitForSeconds(_player.GetTimeSpeed()*2);
-    
-        _pillarController.BonrNextNewPillar();
-        _player.isRotation = false;
         _isNextCol = true;
-
+    }
+    IEnumerator WaitTimeAddItimetimeToPool()
+    {
         yield return new WaitForSeconds(0.35f);
         ItemManager._instance.AddCoinsToPool();
     }
-    public void UpDatePassPillar()
+    IEnumerator WaitTimeAddBornPillar()
     {
-        _currentPillar = _pillarController.gameObject.transform.GetChild(0).GetComponent<Pillar>();
+        yield return new WaitForSeconds(0.35f);
+        _pillarController.BonrNextNewPillar();
+    }
+    public void UpdatePlayer()
+    {
+        _player.GetWeapon().ResetRotation();
+        _player.target = NewPosPlayer();
+        _player.isRotation = false;
+    }
+    public Vector3 NewPosPlayer()
+    {
+        return new Vector3(_pillarController.transform.GetChild(0).transform.position.x+Random.RandomRange(1f,2f), _player.transform.position.y, 0);
+    }
+    void UpdateCurrentEnemy()
+    {   
+        _currentPillar = _pillarController.gameObject.transform.GetChild(1).GetComponent<Pillar>();
         _currentEnemy = _currentPillar.GetEnemy().GetComponent<EnemyController>();
-        _currentEnemy.FindPositionPlayer(_player.gameObject.transform.position);
         _currentEnemy.isCurrentEnemy = true;
         IsGameOver = false;
     }
     public void CountScore()
     {
-        _currentScore++;
+        if (_currentEnemy.isHitHead)
+        {
+            _currentScore += 2;
+        }
+        else
+        {
+            _currentScore += 1;
+        }
     }
     public float GetCurrentScore()
     {
@@ -173,7 +193,7 @@ public class GameController : Singleton<GameController>
         }
         return AmountCoins;
     }
-    public void CheckPlayerHeadShot()
+    public void UpdateNoti()
     {
         _player.GetWeapon().isFiver = false;
         IsFever = false;
@@ -219,6 +239,10 @@ public class GameController : Singleton<GameController>
     {
         //_currentCoins = 10000;
       ///  DataPlayer.UpdateAmountCoins(_currentCoins);
+    }
+    public void LoadDataGame()
+    {
+        _pillarController.SetUpGame();
     }
 
     //public void LoadScenceAgain()

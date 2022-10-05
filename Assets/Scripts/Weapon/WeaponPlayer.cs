@@ -5,21 +5,18 @@ using UnityEngine;
 public class WeaponPlayer : Weapon
 {
     public bool isFiver = false;
-
     //snatch gun
     [SerializeField] float _speedSnatch;
     [SerializeField] Vector3 _targetPos;
     [SerializeField] Vector3 _currentPos;
 
+    [SerializeField] TrailRenderer _trailRenderer;
     public void AutoRotate()
     {
         _target = Quaternion.Euler(transform.rotation.x, transform.rotation.y, currentAngleZ);
         currentAngleZ = currentAngleZ + Time.deltaTime * _speedRotate;
         transform.rotation = _target;
     }
-
- 
-
     IEnumerator Move(Transform CurrentTransform, Vector3 Target, float TotalTime)
     {
         var passed = 0f;
@@ -33,7 +30,7 @@ public class WeaponPlayer : Weapon
             yield return null;
         }
     }
-   public void Shoot()
+    public void Shoot()
     {
         StartCoroutine(WaitShoot());
     }
@@ -60,15 +57,30 @@ public class WeaponPlayer : Weapon
         yield return new WaitForSeconds(1f);
         _particleFirePoint.SetActive(false);
     }
+
     //Snatch gun
     IEnumerator Snatch()
     {
         Debug.Log("Snatch");
-        _targetPos = new Vector3(transform.position.x - 0.14f, transform.position.x, 0);
+        _targetPos = new Vector3(transform.position.x - 0.14f, transform.position.y, 0);
         _currentPos = new Vector3(transform.position.x, transform.position.y, 0);
         StartCoroutine(Move(transform, _targetPos, _speedSnatch));
         yield return new WaitForSeconds(_speedSnatch);
         StartCoroutine(Move(transform, _currentPos, _speedSnatch));
         yield return new WaitForSeconds(_speedSnatch);
     }
+    //public TrailRenderer Trailrenderer()
+    //{
+    //    return _trailRenderer;
+    //}
+    public void ClearTrail()
+    {
+        _trailRenderer.Clear();
+        _trailRenderer.gameObject.SetActive(false);
+    }
+    public void SetEnableTrail()
+    {
+        _trailRenderer.gameObject.SetActive(true);
+    }
+
 }

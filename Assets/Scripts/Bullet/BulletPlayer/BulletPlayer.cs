@@ -30,7 +30,6 @@ public class BulletPlayer : BaseBullet
         }
         else
         {
-            Debug.Log("stateBullet Normal");
             transform.localScale = new Vector3(_localScale.x,_localScale.y, 0);
         }
 
