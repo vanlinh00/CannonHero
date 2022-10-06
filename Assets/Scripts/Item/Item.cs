@@ -20,13 +20,14 @@ public class Item : MonoBehaviour
 
         if (Random.RandomRange(1, 3) == 2)
         {
-            x = Random.RandomRange(-0.1f, -0.09f);
+            x = Random.RandomRange(-0.2f, -0.1f);
         }
         else
         {
-            x = Random.RandomRange(0.1f, 0.15f);
+            x = Random.RandomRange(0.1f, 0.17f);
         }
-        _rigidbody2D.AddForce(new Vector3(x, Random.RandomRange(0.6f,0.7f), 0f) * _force);
+
+        _rigidbody2D.AddForce(new Vector3(x, Random.RandomRange(0.5f,0.8f), 0f) * _force);
     }
     public void ResetCoin()
     {
@@ -36,8 +37,9 @@ public class Item : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.CompareTag("Wall")|| collision.gameObject.CompareTag("HeadEnemy")|| collision.gameObject.CompareTag("BodyPillar"))
         {
+            SoundController._instance.OnPlayAudio(SoundType.Coin);
             AlwaysPresent._instance.CountCoins();
             GetComponent<CircleCollider2D>().enabled = false;
             StartCoroutine(WaitAddToPool());

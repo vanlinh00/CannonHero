@@ -35,7 +35,6 @@ public class PillarController : MonoBehaviour
     }
     public void AddPillarToObjectPool(GameObject ObjFirstPillar)
     {
-        Pillar FirstPillar = ObjFirstPillar.GetComponent<Pillar>();
         ObjFirstPillar.transform.parent = ObjectPooler._instance.transform;
         ObjectPooler._instance.AddElement("Pillar", ObjFirstPillar);
     }

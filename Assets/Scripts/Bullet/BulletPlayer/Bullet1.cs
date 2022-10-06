@@ -21,10 +21,11 @@ public class Bullet1 : BulletPlayer,Iflyable
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        ObjectPooler._instance.SpawnFromPool("ExplodePartile", _exploteParticle.transform.position, Quaternion.identity);
-        ObjectPooler._instance.AddElement("Bullet"+ _idBullet, gameObject);
+        if(!collision.transform.CompareTag("MissBullet"))
+        {
+            ObjectPooler._instance.SpawnFromPool("ExplodePartile", _exploteParticle.transform.position, Quaternion.identity);
+        }
+        ObjectPooler._instance.AddElement("Bullet" + _idBullet, gameObject);
         gameObject.SetActive(false);
-
-        //gameObject.transform.GetChild(0).GetComponent<LineBullet3>().WaitTime();
     }
 }

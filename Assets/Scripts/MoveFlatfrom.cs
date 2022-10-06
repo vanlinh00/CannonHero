@@ -14,13 +14,13 @@ public class MoveFlatfrom : MonoBehaviour
     }
     IEnumerator WaitTimeLoadPlayer()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         player = GameObject.FindGameObjectWithTag("Player");
         offset.x = transform.position.x - player.transform.position.x;
         offset.y = transform.position.y - player.transform.position.y;
         _isMove = true;
     }
-    private void Update()
+    private void FixedUpdate()
     {
         if (_isMove)
         {

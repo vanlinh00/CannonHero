@@ -31,11 +31,30 @@ public class LoadData : MonoBehaviour
     }
     public void LoadBackGround()
     {
-        int idBg = 1;// Random.RandomRange(1,4);
+        int idBg = Random.RandomRange(1,4);
         GameObject Pillar = Instantiate(Resources.Load("BackGround/Bg" + idBg+"/Pillar", typeof(GameObject)), transform.position, Quaternion.identity) as GameObject;
         Pillar.SetActive(false);
         ObjectPooler._instance.CreateQueObject(3, "Pillar", Pillar);
 
+        GameObject BgStatic1 = Instantiate(Resources.Load("BackGround/Bg" + idBg + "/BgStatic1", typeof(GameObject)), transform.position, Quaternion.identity) as GameObject;
+        BgStatic1.SetActive(false);
+        ObjectPooler._instance.CreateQueObject(1, "BgStatic1", BgStatic1);
+
+        GameObject BgStatic2 = Instantiate(Resources.Load("BackGround/Bg" + idBg + "/BgStatic2", typeof(GameObject)), transform.position, Quaternion.identity) as GameObject;
+        BgStatic2.SetActive(false);
+        ObjectPooler._instance.CreateQueObject(1, "BgStatic2", BgStatic2);
+
+        GameObject BgDynamic = Instantiate(Resources.Load("BackGround/Bg" + idBg + "/BgDynamic", typeof(GameObject)), transform.position, Quaternion.identity) as GameObject;
+        BgDynamic.SetActive(false);
+        ObjectPooler._instance.CreateQueObject(4, "BgDynamic", BgDynamic);
+
+        GameObject Cloud = Instantiate(Resources.Load("BackGround/Bg" + idBg + "/Cloud", typeof(GameObject)), transform.position, Quaternion.identity) as GameObject;
+        Cloud.SetActive(false);
+        ObjectPooler._instance.CreateQueObject(3, "Cloud", Cloud);
+
+        GameObject Wall = Instantiate(Resources.Load("BackGround/Bg" + idBg + "/Wall", typeof(GameObject)), transform.position, Quaternion.identity) as GameObject;
+        Wall.SetActive(false);
+        ObjectPooler._instance.CreateQueObject(4, "Wall", Wall);
     }
     public void LoadBulletEnemy()
     {

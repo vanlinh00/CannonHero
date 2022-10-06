@@ -11,6 +11,11 @@ public class GameHome : MonoBehaviour
     [SerializeField] Button _soundBtn;
 
     [SerializeField] Animator _animator;
+    [SerializeField] Text _bestScore;
+    private void Start()
+    {
+        _bestScore.text = "Best " + DataPlayer.GetInforPlayer().bestScore.ToString();    
+    }
     private void Awake()
     {
         _startGamePlayBtn.onClick.AddListener(OpenGamePlay);

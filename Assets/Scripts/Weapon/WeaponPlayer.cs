@@ -11,6 +11,8 @@ public class WeaponPlayer : Weapon
     [SerializeField] Vector3 _currentPos;
 
     [SerializeField] TrailRenderer _trailRenderer;
+    [SerializeField] GameObject _ferverParticle;
+
     public void AutoRotate()
     {
         _target = Quaternion.Euler(transform.rotation.x, transform.rotation.y, currentAngleZ);
@@ -82,5 +84,8 @@ public class WeaponPlayer : Weapon
     {
         _trailRenderer.gameObject.SetActive(true);
     }
-
+    public void SetActiveFeverParticle(bool res)
+    {
+        _ferverParticle.SetActive(res);
+    }
 }

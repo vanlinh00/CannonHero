@@ -18,35 +18,46 @@ public class UiController : Singleton<UiController>
         base.Awake();
         RestartBtn.onClick.AddListener(RestartGame);
     }
-    //private void OnEnable()
-    //{
-    //    // Get data form DataPlayer
-    //    InforPlayer inforPlayer = DataPlayer.GetInforPlayer();
+    private void OnEnable()
+    {
+        InforPlayer inforPlayer = DataPlayer.GetInforPlayer();
 
-    //    if (inforPlayer.isLoadGameAgain)
-    //    {
-
-    //    }
-    //    else
-    //    {
-      
-    //    }
-    //}
+        if (inforPlayer.isLoadGameAgain)
+        {
+            DataPlayer.UpdataLoadGameAgain(false);
+            OpenGamePlayAgain();
+        }
+        else
+        {
+            OpenGameHome();
+        }
+        StartCoroutine(WaitTimeEnableSound());
+    }
+    IEnumerator WaitTimeEnableSound()
+    {
+        yield return new WaitForEndOfFrame();
+        SoundBackGround._instance.OnPlayAudio(SoundType.BackGround);
+    }
     void RestartGame()
     {
          SceneManager.LoadScene(0);
-       //  GameController._instance.LoadScenceAgain();
     }
-
+    public void OpenGamePlayAgain()
+    {
+        _gameHomePanel.SetActive(false);
+        _shopPanel.SetActive(false);
+        _pauseGamePanel.SetActive(false);
+        _gamOverPanel.SetActive(false);
+        _gamePlayPanel.SetActive(true);
+    }
     public void OpenGamePlay()
     {
         StartCoroutine(DisableGameHome());
         _shopPanel.SetActive(false);
         _pauseGamePanel.SetActive(false);
         _gamOverPanel.SetActive(false);
-
-        _gamePlayPanel.GetComponent<GamePlay>().In();
         _gamePlayPanel.SetActive(true);
+        _gamePlayPanel.GetComponent<GamePlay>().In();
     }
     IEnumerator DisableGameHome()
     {

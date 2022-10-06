@@ -8,6 +8,9 @@ TagManager:
   - Coin
   - Wall
   - BodyPlayer
+  - MissBullet
+  - HeadEnemy
+  - BodyPillar
   layers:
   - Default
   - TransparentFX

@@ -19,7 +19,6 @@ public class PauseGame : MonoBehaviour
         _homeBtn.onClick.AddListener(GotoHome);
         _restartBtn.onClick.AddListener(RestartGame);
     }
-
     private void RestartGame()
     {
         Time.timeScale = 1;

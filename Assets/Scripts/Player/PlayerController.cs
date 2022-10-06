@@ -6,6 +6,7 @@ public class PlayerController :MonoBehaviour
 {
     [SerializeField] GameObject Weapon;
     [SerializeField] GameObject ParticleDead;
+    [SerializeField] GameObject ParticleDead2;
 
     private WeaponPlayer _weapon;
     public bool isRotation = false;
@@ -31,12 +32,11 @@ public class PlayerController :MonoBehaviour
         Living,
         Die,
     }
-
     public StatePlayer statePlayer;
     public bool isEnableTrail=true;
 
     public bool isMove = false;
-    [SerializeField] float _moveTime;
+    [SerializeField] float _moveSpeed;
     public Vector3 target;
     public bool isEnableStateIdle = true;
     private void Start()
@@ -49,10 +49,10 @@ public class PlayerController :MonoBehaviour
     {
         if (isMove)
         {
-            var step = _moveTime * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, target, step);
+            var step = _moveSpeed * Time.deltaTime;
+             transform.position = Vector3.MoveTowards(transform.position, target, step);
             if (Vector3.Distance(transform.position, target) == 0f)
-            {
+            {   
                 isMove = false;
                 isEnableStateIdle = true;
                 isEnableTrail = true;
@@ -67,6 +67,7 @@ public class PlayerController :MonoBehaviour
             }
         }
     }
+
     public WeaponPlayer GetWeapon()
     {
         return _weapon;
@@ -84,7 +85,6 @@ public class PlayerController :MonoBehaviour
             _weapon.AutoRotate();
         }
     }
-
     public void WeaponShoot()
     {
        _weapon.Shoot();
@@ -92,12 +92,14 @@ public class PlayerController :MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.transform.CompareTag("Bullet"))
-        {
+        { 
             statePlayer = StatePlayer.Die;
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
             _animator.enabled = false;
             ParticleDead.SetActive(true);
+            ParticleDead2.SetActive(true);
             BreakObjectInPlayer();
+            SoundController._instance.OnPlayAudio(SoundType.Die);
         }
     }
     public void BreakObjectInPlayer()
@@ -136,6 +138,7 @@ public class PlayerController :MonoBehaviour
         StateIdle();
         gameObject.GetComponent<BoxCollider2D>().enabled = true;
         ParticleDead.SetActive(false);
+        ParticleDead2.SetActive(false);
     }
     public void StateIdle()
     {
@@ -159,16 +162,11 @@ public class PlayerController :MonoBehaviour
         _animator.SetBool("IsRun", false);
         _animator.SetBool("RotateHead", true);
     }   
-
     public void MoveToNextPillar()
     {
         isMove = true;
         StateRun();
     }
-    public float GetTimeSpeed()
-    {
-        return _speedMove;
-    }
 
-
+ 
 }

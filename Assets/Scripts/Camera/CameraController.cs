@@ -15,7 +15,6 @@ public class CameraController : Singleton<CameraController>
     IEnumerator WaitTimeLoadPlayer()
     {
         yield return new WaitForSeconds(1f);
-
         player = GameObject.FindGameObjectWithTag("Player");
         offset.x = transform.position.x - player.transform.position.x;
         offset.y = transform.position.y - player.transform.position.y;
@@ -27,7 +26,7 @@ public class CameraController : Singleton<CameraController>
     }
     private void FixedUpdate()
     {
-        if(_isMove)
+        if(_isMove &&!GameController._instance.isOnShop)
         {
             transform.position = new Vector3(player.transform.position.x + offset.x, player.transform.position.y + offset.y, -10); 
         }

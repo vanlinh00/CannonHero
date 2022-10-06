@@ -28,23 +28,39 @@ public class GameOver : MonoBehaviour
 
     public void ResurrectPlayer()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         GameController._instance.ResurrectPlayer();
         UiController._instance.OpenGamePlay();
     }
-    void SetCurrentScore()
+    private void OnEnable()
     {
-
+        UpdateCurrentScore();
     }
-    void SetBestScore()
+    public void UpdateCurrentScore()
     {
-
+        int CurrentScore = GameController._instance.GetCurrentScore();
+        _currentScoreTxt.text = CurrentScore.ToString();
+        UpdateBestScore(CurrentScore);
     }
+    public void UpdateBestScore(int CurrentScore)
+    {
+        int BestScore = DataPlayer.GetInforPlayer().bestScore;
+        if (BestScore < CurrentScore)
+        {
+            BestScore = CurrentScore;
+            DataPlayer.UpdateBestScore(BestScore);
+        }
+        _bestScoreTxt.text = "BEST "+ BestScore.ToString();
+    }
+
     public void ComeBackHome()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         SceneManager.LoadScene(0);
     }
     public void OpenShop()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         GameController._instance.SetActiveRegionShop(true);
         GameController._instance.isOnShop = true;
         UiController._instance.OpenShop();
@@ -52,6 +68,8 @@ public class GameOver : MonoBehaviour
     }
     public void ReplayGame()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
+        DataPlayer.UpdataLoadGameAgain(true);
         SceneManager.LoadScene(0);
     }
 }

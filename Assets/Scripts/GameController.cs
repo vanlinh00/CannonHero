@@ -25,6 +25,7 @@ public class GameController : Singleton<GameController>
     public int CountHeadShot = 0;
     private bool isShowGameOver = false;
     public bool IsFever = false;
+    public bool isSoundRifleCock = false;
     protected override void Awake()
     {
         base.Awake();
@@ -53,6 +54,12 @@ public class GameController : Singleton<GameController>
             {
                 _player.RotateHead();
                 _player.RotateWeapon();
+
+                if (!isSoundRifleCock)
+                {
+                    EnableSoundRifleCock();
+                    isSoundRifleCock = true;
+                }
             }
             if (Input.GetMouseButtonUp(0) && !_player.isShoot && _isNextCol)
             {
@@ -62,7 +69,7 @@ public class GameController : Singleton<GameController>
                 _player.isRotateHead = false;
                 _player.GetWeapon().ClearTrail();
                 _player.WeaponShoot();
-            
+                SoundController._instance.OnPlayAudio(SoundType.cannon_fire);
             }
             if (_player.isShoot)
             {   
@@ -79,10 +86,17 @@ public class GameController : Singleton<GameController>
 
                     UpdateNoti();
                     UpdatePlayer();
-                    _player.MoveToNextPillar();
+
+                    StartCoroutine(WaitTimePlayerMove());
                     StartCoroutine(WaitTimePlayerMoveToNextPillar());
                     StartCoroutine(WaitTimeAddItimetimeToPool());
                     StartCoroutine(WaitTimeAddBornPillar());
+
+                    BackGroundDynamic._instance.isCrateBg = true;
+
+                    WallController._instance.isCrateWall = true;
+                    WallController._instance.BornNewWall();
+                    WallController._instance.AddWallToObjectPool();
                     UpdateCurrentEnemy();
                 }
 
@@ -119,10 +133,14 @@ public class GameController : Singleton<GameController>
             }
         }
     }
-  
+    IEnumerator WaitTimePlayerMove()
+    {
+        yield return new WaitForSeconds(0.2f);
+        _player.MoveToNextPillar();
+    }
     IEnumerator WaitTimePlayerMoveToNextPillar()
     {
-        yield return new WaitForSeconds(0.9f);
+        yield return new WaitForSeconds(0.4f);
         _isNextCol = true;
     }
     IEnumerator WaitTimeAddItimetimeToPool()
@@ -135,6 +153,7 @@ public class GameController : Singleton<GameController>
         yield return new WaitForSeconds(0.35f);
         _pillarController.BonrNextNewPillar();
     }
+
     public void UpdatePlayer()
     {
         _player.GetWeapon().ResetRotation();
@@ -163,7 +182,7 @@ public class GameController : Singleton<GameController>
             _currentScore += 1;
         }
     }
-    public float GetCurrentScore()
+    public int GetCurrentScore()
     {
         return _currentScore;
     }
@@ -181,21 +200,22 @@ public class GameController : Singleton<GameController>
 
         if (_currentEnemy.isHitHead)
         {
-            AmountCoins = 7;
+            AmountCoins = Random.RandomRange(7, 10);
         }
         else if (_currentEnemy.isHitBody)
         {
-            AmountCoins = 4;
+            AmountCoins = Random.RandomRange(4, 7);
         }
         else
         {
-            AmountCoins = 3;
+            AmountCoins = Random.RandomRange(2, 4);
         }
-        return AmountCoins;
+        return /*(_player.GetWeapon().isFiver)?AmountCoins*2:*/AmountCoins;
     }
     public void UpdateNoti()
     {
         _player.GetWeapon().isFiver = false;
+        _player.GetWeapon().SetActiveFeverParticle(false);
         IsFever = false;
         if (_currentEnemy.isHitHead)
         {
@@ -205,6 +225,7 @@ public class GameController : Singleton<GameController>
             {
                 AlwaysPresent._instance.DisplayNotiFeVer("FEVER");
                 _player.GetWeapon().isFiver = true;
+                _player.GetWeapon().SetActiveFeverParticle(true);
                 IsFever = true;
                 CountHeadShot = 0;
             }
@@ -227,6 +248,7 @@ public class GameController : Singleton<GameController>
     {
         IsGameOver = false;
         _currentEnemy.GetWeapon().ResetRotation();
+        _currentEnemy.isCurrentEnemy = true;
         _player.isRotation = false;
         _isNextCol = true;
         _player.RecurrectPlayer();
@@ -243,6 +265,13 @@ public class GameController : Singleton<GameController>
     public void LoadDataGame()
     {
         _pillarController.SetUpGame();
+        WallController._instance.SetUp();
+        BackGroundDynamic._instance.SetUp();
+        BackGroundController._instance.LoadBackGround();
+    }
+    public void EnableSoundRifleCock()
+    {
+        SoundController._instance.OnPlayAudio(SoundType.rifle_cock);
     }
 
     //public void LoadScenceAgain()

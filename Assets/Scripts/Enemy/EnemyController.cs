@@ -18,12 +18,12 @@ public class EnemyController : MonoBehaviour
     [SerializeField] GameObject _feet;
 
     public bool isBornCoin;
-
     public bool isHitHead;
     public bool isHitBody;
     public bool isHitFeet;
 
     public PlayerController _player;
+
     public enum StateEnemy
     {
         Living,
@@ -58,12 +58,12 @@ public class EnemyController : MonoBehaviour
                 Shoot();
             }
         }
-       
     }
 
    public void Die()
     {
-        if(isBornCoin)
+        SoundController._instance.OnPlayAudio(SoundType.PassPillar);
+        if (isBornCoin)
         {
             Vector3 PosCoin = new Vector3(_head.transform.position.x, _head.transform.position.y + 0.2f, 0f);
             gameObject.transform.parent.transform.parent.GetComponent<Pillar>().BornCoins(PosCoin);
@@ -77,8 +77,9 @@ public class EnemyController : MonoBehaviour
 
         if (gameObject.GetComponent<Rigidbody2D>() == null)
         {
-            AddRigibody();
-            _rigidbody2D.AddForce(new Vector3(0.2f, 0.7f, 0f) * _force);
+             AddRigibody();
+            Vector3 VectorForce = new Vector3(Random.RandomRange(0.1f, 0.22f), Random.RandomRange(0.6f, 0.9f), 0);
+            _rigidbody2D.AddForce(VectorForce * _force);
             _rigidbody2D.AddTorque(_torqueSpeed, ForceMode2D.Force);
             _head.GetComponent<PolygonCollider2D>().enabled = false;
             _body.GetComponent<BoxCollider2D>().enabled = false;
@@ -111,7 +112,7 @@ public class EnemyController : MonoBehaviour
     IEnumerator WaitTimeShoot()
     {  
         WeaPonRotateToPlayer();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.44f);
         _weapon.Shoot();
     }
     public void ResetEnemy()
@@ -124,11 +125,15 @@ public class EnemyController : MonoBehaviour
         transform.localPosition = _posEnemy;
         transform.rotation = Quaternion.Euler(0, 0, 0);
         isCurrentEnemy = false;
+
+        _head.SetActive(true);
         _head.GetComponent<PolygonCollider2D>().enabled = true;
         _body.GetComponent<BoxCollider2D>().enabled = true;
         _feet.GetComponent<BoxCollider2D>().enabled = true;
 
-        _head.GetComponent<HeadEnemy>().ParticleBoolHead.SetActive(false);
+        _head.GetComponent<HeadEnemy>().SetActiveParticleBoolHead(false);
+        _body.GetComponent<BodyEnemy>().SetActiveParticleBoolBody(false);
+        _feet.GetComponent<FeetEnemy>().SetActiveParticleBoolFeetEnemy(false);
 
         isHitHead = false;
         isHitBody = false;
