@@ -23,9 +23,9 @@ public class Bullet1 : BulletPlayer,Iflyable
     {
         if(!collision.transform.CompareTag("MissBullet"))
         {
-            ObjectPooler._instance.SpawnFromPool("ExplodePartile", _exploteParticle.transform.position, Quaternion.identity);
+            ObjectPooler._instance.SpawnFromPool("ExplodeParticle" + _idBullet, _exploteParticle.transform.position, Quaternion.identity);
         }
-        ObjectPooler._instance.AddElement("Bullet" + _idBullet, gameObject);
+        ObjectPooler._instance.AddElement("BulletPlayer" + _idBullet, gameObject);
         gameObject.SetActive(false);
     }
 }

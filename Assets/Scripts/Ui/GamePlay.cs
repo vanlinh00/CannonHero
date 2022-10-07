@@ -26,10 +26,10 @@ public class GamePlay : Singleton<GamePlay>
     }
     public void In()
     {
-        _animator.SetBool("out", false);
+        _animator.SetBool("Out", false);
     }
     public void Out()
     {
-        _animator.SetBool("out", true);
+        _animator.SetBool("Out", true);
     }
 }

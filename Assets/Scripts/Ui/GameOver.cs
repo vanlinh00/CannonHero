@@ -56,7 +56,9 @@ public class GameOver : MonoBehaviour
     public void ComeBackHome()
     {
         SoundController._instance.OnPlayAudio(SoundType.mouse_click);
-        SceneManager.LoadScene(0);
+        GameController._instance.LoadScenceAgain();
+        UiController._instance.OpenGameHome();
+        GamePlay._instance.CountScore();
     }
     public void OpenShop()
     {
@@ -65,11 +67,14 @@ public class GameOver : MonoBehaviour
         GameController._instance.isOnShop = true;
         UiController._instance.OpenShop();
         CameraController._instance.GoToShop();
+
     }
     public void ReplayGame()
     {
         SoundController._instance.OnPlayAudio(SoundType.mouse_click);
-        DataPlayer.UpdataLoadGameAgain(true);
-        SceneManager.LoadScene(0);
+        GameController._instance.LoadScenceAgain();
+        UiController._instance.OpenGamePlay();
+        GamePlay._instance.CountScore();
+
     }
 }

@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class ExploteParticle : MonoBehaviour
 {
+    public int isBullet;
     private void OnEnable()
     {
-        Debug.Log("ExploteParticle");
         StartCoroutine(WaitTimeDisable());
     }
     IEnumerator WaitTimeDisable()
     {
-        yield return new WaitForSeconds(1f);
-        ObjectPooler._instance.AddElement("ExplodePartile", gameObject);
+        yield return new WaitForSeconds(0.5f); 
+        ObjectPooler._instance.AddElement("ExplodeParticle" + isBullet, gameObject);
         this.gameObject.SetActive(false);
     }
 

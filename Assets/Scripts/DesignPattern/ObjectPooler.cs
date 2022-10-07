@@ -12,7 +12,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
     }
     #endregion
 
-    [System.Serializable]
+   [System.Serializable]
     public class Pool
     {
         public string tag;
@@ -26,18 +26,18 @@ public class ObjectPooler : Singleton<ObjectPooler>
     {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-        //foreach (Pool pool in pools)
-        //{
-        //    Queue<GameObject> queueObjectPool = new Queue<GameObject>();
-        //    for (int i = 0; i < pool.size; i++)
-        //    {
-        //        GameObject obj = Instantiate(pool.prefab);
-        //        obj.transform.parent = this.transform;
-        //        obj.SetActive(false);
-        //        queueObjectPool.Enqueue(obj);
-        //    }
-        //    poolDictionary.Add(pool.tag, queueObjectPool);
-        //}
+        foreach (Pool pool in pools)
+        {
+            Queue<GameObject> queueObjectPool = new Queue<GameObject>();
+            for (int i = 0; i < pool.size; i++)
+            {
+                GameObject obj = Instantiate(pool.prefab);
+                obj.transform.parent = this.transform;
+                obj.SetActive(false);
+                queueObjectPool.Enqueue(obj);
+            }
+            poolDictionary.Add(pool.tag, queueObjectPool);
+        }
 
     }
     public void CreateQueObject(int size, string tag, GameObject prefab )
@@ -78,7 +78,6 @@ public class ObjectPooler : Singleton<ObjectPooler>
         {
             Debug.LogWarning("Pool with tag" + tag + "doesn't excist");
         }
-
         poolDictionary[tag].Enqueue(objectToSpawn);
     }
 }

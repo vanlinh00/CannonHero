@@ -85,7 +85,17 @@ public class ManagerShopHero : Singleton<ManagerShopHero>
     public void LoadGameWithHeroSelect()
     {
         DataPlayer.UpdateHeroPlaying(idHeroSelect);
-        SceneManager.LoadScene(0);
+        //DisableCurrentHero();
+        //GameController._instance.isOnShop = false;
+        //UiController._instance.OpenGameHome();
+        //GameController._instance.LoadScenceAgain();
+        //LoadData._instance.LoadDataPlayer();
+         SceneManager.LoadScene(0);
     }
-   
+    public void DisableCurrentHero()
+    {
+        //GameObject Player = GameObject.FindGameObjectWithTag("Player");
+        //Player.transform.parent = ObjectPooler._instance.transform;
+        //Player.SetActive(false);
+    }   
 }

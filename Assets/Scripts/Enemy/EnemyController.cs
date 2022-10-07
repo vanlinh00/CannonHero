@@ -22,8 +22,7 @@ public class EnemyController : MonoBehaviour
     public bool isHitBody;
     public bool isHitFeet;
 
-    public PlayerController _player;
-
+    public GameObject player;
     public enum StateEnemy
     {
         Living,
@@ -37,25 +36,27 @@ public class EnemyController : MonoBehaviour
         isHitFeet = false;
         isBornCoin = true;
         _weapon = Weapon.GetComponent<WeaponEnemy>();
-        StartCoroutine(WaitTimeForUpdatePlayer());
     }
     private void Awake()
     {
         isCurrentEnemy = false;
     }
-    IEnumerator WaitTimeForUpdatePlayer()
+    private void OnEnable()
     {
-        yield return new WaitForEndOfFrame();
-        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        player = GameObject.FindGameObjectWithTag("Player");
     }
+
     private void Update()
     {
-        if (GameController._instance.IsGameOver)
+        if(GameController._instance.isGameOver)
         {
-            if (_player.statePlayer != PlayerController.StatePlayer.Die&& isCurrentEnemy && _stateEnemy != StateEnemy.Die)
+            if(isCurrentEnemy)
             {
-                isCurrentEnemy = false;
-                Shoot();
+                if (GameController._instance.statePlayer != PlayerController.StatePlayer.Die && _stateEnemy != StateEnemy.Die)
+                {
+                    isCurrentEnemy = false;
+                    Shoot();
+                }
             }
         }
     }
@@ -67,7 +68,7 @@ public class EnemyController : MonoBehaviour
         {
             Vector3 PosCoin = new Vector3(_head.transform.position.x, _head.transform.position.y + 0.2f, 0f);
             gameObject.transform.parent.transform.parent.GetComponent<Pillar>().BornCoins(PosCoin);
-            if (GameController._instance.IsFever)
+            if (GameController._instance.isFever)
             {
                 gameObject.transform.parent.transform.parent.GetComponent<Pillar>().BornDiamonds(PosCoin);
             }
@@ -97,7 +98,7 @@ public class EnemyController : MonoBehaviour
     void WeaPonRotateToPlayer()
     {
         Vector3 VectorA = _weapon.PosFirePoint() -Weapon.transform.position;
-        Vector3 VectorB = _player.transform.position - Weapon.transform.position;
+        Vector3 VectorB = player.transform.position - Weapon.transform.position;
         float angle = Vector2.Angle(VectorA, VectorB);
         StartCoroutine(_weapon.FadeRotateToTarget(0, angle));
     }
@@ -112,7 +113,7 @@ public class EnemyController : MonoBehaviour
     IEnumerator WaitTimeShoot()
     {  
         WeaPonRotateToPlayer();
-        yield return new WaitForSeconds(0.44f);
+        yield return new WaitForSeconds(0.6f);
         _weapon.Shoot();
     }
     public void ResetEnemy()

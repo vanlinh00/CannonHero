@@ -29,16 +29,17 @@ public class ItemManager : Singleton<ItemManager>
             CoinSc.StateIdle();
             CoinSc.AddForce();
             _listObectCoins.Add(NewCoin);
+
         }
         return _listObectCoins;
     }
-    public  List<GameObject> BornDiamonds(int Number, Vector3 PosCoin)
-      {
+    public List<GameObject> BornDiamonds(int Number, Vector3 PosCoin)
+    {
         Vector3 NewPos;
         for (int i = 1; i <= Number; i++)
         {
             NewPos = new Vector3(PosCoin.x + Random.RandomRange(-0.3f, 0.3f), PosCoin.y + Random.RandomRange(-0.3f, 0.3f), 0f);
-            GameObject NewCoin = ObjectPooler._instance.SpawnFromPool("Diamond0"+i, NewPos, Quaternion.identity);
+            GameObject NewCoin = ObjectPooler._instance.SpawnFromPool("Diamond0" + i, NewPos, Quaternion.identity);
             NewCoin.SetActive(false);
             NewCoin.SetActive(true);
 
@@ -49,14 +50,25 @@ public class ItemManager : Singleton<ItemManager>
             _listObectDiamond.Add(NewCoin);
         }
         return _listObectDiamond;
-       }
+    }
     public void AddCoinsToPool()
     {
-       foreach(GameObject coin in _listObectCoins)
+        foreach (GameObject coin in _listObectCoins)
         {
             ObjectPooler._instance.AddElement("Coin", coin);
             coin.transform.parent = ObjectPooler._instance.transform;
         }
         _listObectCoins.Clear();
+    }
+    public void AddDiamondToPool()
+    {
+        int i = 1;
+        foreach (GameObject Diamond in _listObectDiamond)
+        {
+            ObjectPooler._instance.AddElement("Diamond0" + i, Diamond);
+            Diamond.transform.parent = ObjectPooler._instance.transform;
+            i++;
+        }
+        _listObectDiamond.Clear();
     }
 }

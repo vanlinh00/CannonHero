@@ -5,7 +5,8 @@ using UnityEngine;
 public class BulletEnemy : BaseBullet, Iflyable
 {
     Vector3 _posPlayer;
-    private void Start()
+
+    public void FindPosPlayer()
     {
         _posPlayer = GameObject.FindGameObjectWithTag("Player").transform.position;
     }
@@ -17,7 +18,7 @@ public class BulletEnemy : BaseBullet, Iflyable
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-       ObjectPooler._instance.AddElement("Bullet0", this.gameObject);
+       ObjectPooler._instance.AddElement("BulletEnemy", this.gameObject);
        gameObject.SetActive(false);
     }
 

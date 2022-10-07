@@ -9,7 +9,7 @@ public class BodyPillar : MonoBehaviour
         if (collision.gameObject.CompareTag("Bullet"))
         {
             transform.parent.parent.GetComponent<Pillar>().StateShock();
-            GameController._instance.IsGameOver = true;
+            GameController._instance.isGameOver = true;
         }
     }
 }

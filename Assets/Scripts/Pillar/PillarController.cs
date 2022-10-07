@@ -28,33 +28,33 @@ public class PillarController : MonoBehaviour
     }
     public void CreateNewPillar(Vector3 PosLastPillar)
     {
-        GameObject NewPillar = ObjectPooler._instance.SpawnFromPool("Pillar", PosLastPillar, Quaternion.identity);
+        GameObject NewPillar = ObjectPooler._instance.SpawnFromPool("Pillar"+GameController._instance.idBg, PosLastPillar, Quaternion.identity);
         NewPillar.GetComponent<Pillar>().SetEnabledColliderInBody(true);
         NewPillar.GetComponent<Pillar>().ResetPillar();
         NewPillar.transform.parent = transform;
     }
     public void AddPillarToObjectPool(GameObject ObjFirstPillar)
     {
-        ObjFirstPillar.transform.parent = ObjectPooler._instance.transform;
-        ObjectPooler._instance.AddElement("Pillar", ObjFirstPillar);
+        ObjFirstPillar.transform.parent = OldObjectPool._instance.transform;
+        ObjectPooler._instance.AddElement("Pillar" + GameController._instance.idBg, ObjFirstPillar);
     }
      
     public GameObject GetFristPillar()
     {
         return transform.GetChild(0).gameObject;
     }
+    public void ResetPillarController()
+    {
+        GameObject Pillar;
+        int NumChild = transform.childCount;
+        for (int i = 0; i < NumChild; i++)
+        {
+            Pillar = transform.GetChild(0).gameObject;
+            Pillar.SetActive(false);
+            ObjectPooler._instance.AddElement("Pillar" + GameController._instance.idBg, Pillar);
+            Pillar.transform.parent = ObjectPooler._instance.transform;
+        }
 
-    //public void ResetPillarController()
-    //{
-    //    GameObject Pillar;
-    //    for (int i = 0; i < transform.childCount; ++i)
-    //    {
-    //        Pillar = transform.GetChild(0).gameObject;
-    //        Pillar.SetActive(false);
-    //        ObjectPooler._instance.AddElement("Pillar", Pillar);
-    //        Pillar.transform.parent = ObjectPooler._instance.transform;
-    //    }
-    //    transform.position = new Vector3(0, 0, 0);
-    //    BonrFirstPillar();
-    //}
+
+    }
 }

@@ -8,7 +8,7 @@ public class Wall : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Bullet"))
         {
-            GameController._instance.IsGameOver = true;
+            GameController._instance.isGameOver = true;
             StartCoroutine(WaitTimeSetActive(collision.gameObject));
         }
     }

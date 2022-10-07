@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static PlayerController;
 
 public class GameController : Singleton<GameController>
 {
@@ -11,7 +12,7 @@ public class GameController : Singleton<GameController>
     [SerializeField] EnemyController _currentEnemy;
     [SerializeField] PillarController _pillarController;
 
-    public bool IsGameOver = false;
+    public bool isGameOver = false;
     [SerializeField] GameObject _camera;
     [SerializeField] GameObject _regionShop;
 
@@ -24,8 +25,15 @@ public class GameController : Singleton<GameController>
 
     public int CountHeadShot = 0;
     private bool isShowGameOver = false;
-    public bool IsFever = false;
+    public bool isFever = false;
     public bool isSoundRifleCock = false;
+
+    public int idHeroPlaying;
+    public int idBg;
+
+    public bool isPlayMove = false;
+
+    public StatePlayer statePlayer;
     protected override void Awake()
     {
         base.Awake();
@@ -33,13 +41,19 @@ public class GameController : Singleton<GameController>
     private void Start()
     {
         _isNextCol = true;
+        idHeroPlaying = DataPlayer.GetInforPlayer().idHeroPlaying;
     }
-    public void SetupGame(GameObject Player)
+    public void SetupPlayer(GameObject Player)
     {
         _player = Player.GetComponent<PlayerController>();
+      
+    }
+    public void SetUpEnemy()
+    {
         _currentEnemy = _pillarController.GetFristPillar().GetComponent<Pillar>().GetEnemy().GetComponent<EnemyController>();
         _currentEnemy.isCurrentEnemy = true;
     }
+
     public void Update()
     {
         CheckCanClick();
@@ -73,11 +87,10 @@ public class GameController : Singleton<GameController>
             }
             if (_player.isShoot)
             {   
-                if (IsGameOver&& !isShowGameOver)
+                if (isGameOver&& !isShowGameOver)
                 {
                     AlwaysPresent._instance.DisplayNoti("Miss");
                     isShowGameOver = true;
-         
                 }
                 if (_currentEnemy._stateEnemy == EnemyController.StateEnemy.Die)
                 {
@@ -93,11 +106,12 @@ public class GameController : Singleton<GameController>
                     StartCoroutine(WaitTimeAddBornPillar());
 
                     BackGroundDynamic._instance.isCrateBg = true;
-
                     WallController._instance.isCrateWall = true;
                     WallController._instance.BornNewWall();
                     WallController._instance.AddWallToObjectPool();
-                    UpdateCurrentEnemy();
+
+                    UpdateCurrentEnemy(1);
+
                 }
 
                 if (_player.statePlayer == PlayerController.StatePlayer.Die)
@@ -147,7 +161,9 @@ public class GameController : Singleton<GameController>
     {
         yield return new WaitForSeconds(0.35f);
         ItemManager._instance.AddCoinsToPool();
+        ItemManager._instance.AddDiamondToPool();
     }
+
     IEnumerator WaitTimeAddBornPillar()
     {
         yield return new WaitForSeconds(0.35f);
@@ -164,12 +180,12 @@ public class GameController : Singleton<GameController>
     {
         return new Vector3(_pillarController.transform.GetChild(0).transform.position.x+Random.RandomRange(1f,2f), _player.transform.position.y, 0);
     }
-    void UpdateCurrentEnemy()
+    void UpdateCurrentEnemy(int NumberPillar)
     {   
-        _currentPillar = _pillarController.gameObject.transform.GetChild(1).GetComponent<Pillar>();
+        _currentPillar = _pillarController.gameObject.transform.GetChild(NumberPillar).GetComponent<Pillar>();
         _currentEnemy = _currentPillar.GetEnemy().GetComponent<EnemyController>();
         _currentEnemy.isCurrentEnemy = true;
-        IsGameOver = false;
+        isGameOver = false;
     }
     public void CountScore()
     {
@@ -200,23 +216,23 @@ public class GameController : Singleton<GameController>
 
         if (_currentEnemy.isHitHead)
         {
-            AmountCoins = Random.RandomRange(7, 10);
+            AmountCoins = Random.RandomRange(4,6);
         }
         else if (_currentEnemy.isHitBody)
         {
-            AmountCoins = Random.RandomRange(4, 7);
+            AmountCoins = Random.RandomRange(2, 4);
         }
         else
         {
-            AmountCoins = Random.RandomRange(2, 4);
+            AmountCoins = Random.RandomRange(1, 3);
         }
-        return /*(_player.GetWeapon().isFiver)?AmountCoins*2:*/AmountCoins;
+        return (_player.GetWeapon().isFiver)? AmountCoins *2: AmountCoins;
     }
     public void UpdateNoti()
     {
         _player.GetWeapon().isFiver = false;
         _player.GetWeapon().SetActiveFeverParticle(false);
-        IsFever = false;
+        isFever = false;
         if (_currentEnemy.isHitHead)
         {
             CountHeadShot++;
@@ -226,7 +242,7 @@ public class GameController : Singleton<GameController>
                 AlwaysPresent._instance.DisplayNotiFeVer("FEVER");
                 _player.GetWeapon().isFiver = true;
                 _player.GetWeapon().SetActiveFeverParticle(true);
-                IsFever = true;
+                isFever = true;
                 CountHeadShot = 0;
             }
         }
@@ -246,7 +262,7 @@ public class GameController : Singleton<GameController>
     }
     public void ResurrectPlayer()
     {
-        IsGameOver = false;
+        isGameOver = false;
         _currentEnemy.GetWeapon().ResetRotation();
         _currentEnemy.isCurrentEnemy = true;
         _player.isRotation = false;
@@ -257,27 +273,52 @@ public class GameController : Singleton<GameController>
     {
         _regionShop.SetActive(res);
     }
-    public void UpdateCoins()
-    {
-        //_currentCoins = 10000;
-      ///  DataPlayer.UpdateAmountCoins(_currentCoins);
-    }
+
     public void LoadDataGame()
     {
-        _pillarController.SetUpGame();
-        WallController._instance.SetUp();
-        BackGroundDynamic._instance.SetUp();
-        BackGroundController._instance.LoadBackGround();
+         idBg = Random.RandomRange(1, 3);
+         _pillarController.SetUpGame();
+         WallController._instance.SetUp();
+         BackGroundDynamic._instance.SetUp();
+        BackGroundStatic._instance.LoadBackGroundStatic();
     }
     public void EnableSoundRifleCock()
     {
         SoundController._instance.OnPlayAudio(SoundType.rifle_cock);
     }
 
-    //public void LoadScenceAgain()
-    //{
-    //    _pillarController.ResetPillarController();
-    //    _player.ResetPlayer();
-    //    _camera.transform.position = new Vector3(0, 0, -10);
-    //}
+    public void LoadScenceAgain()
+    {
+        OldObjectPool._instance.SettDisableAllObject();
+
+        _pillarController.ResetPillarController();
+        WallController._instance.ResetAllWalls();
+        BackGroundDynamic._instance.ResetAllBackGroundDynamic();
+        BackGroundStatic._instance.ResetBgStatic();
+        CloudController._instance.ResetAllClouds();
+        StartCoroutine(CloudController._instance.SetUp());
+        CameraController._instance.transform.position = new Vector3(0, 0, -10f);
+        _player.RecurrectPlayer();
+        _player.transform.position = _player.startPos;
+         isGameOver = false;
+        _player.isRotation = false;
+        _isNextCol = true;
+        isShowGameOver = false;
+
+        ResetScore();
+        ResFever();
+        LoadDataGame();
+        UpdateCurrentEnemy(0);
+    }
+
+    public void ResetScore()
+    {
+        _currentScore = -1;
+    }
+    public void ResFever()
+    {
+        CountHeadShot = 0;
+        isFever = false;
+        _player.GetWeapon().isFiver = false;
+    }
 }

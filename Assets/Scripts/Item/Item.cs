@@ -20,14 +20,14 @@ public class Item : MonoBehaviour
 
         if (Random.RandomRange(1, 3) == 2)
         {
-            x = Random.RandomRange(-0.2f, -0.1f);
+            x = Random.RandomRange(-0.24f, -0.13f);
         }
         else
         {
-            x = Random.RandomRange(0.1f, 0.17f);
+            x = Random.RandomRange(0.12f, 0.17f);
         }
 
-        _rigidbody2D.AddForce(new Vector3(x, Random.RandomRange(0.5f,0.8f), 0f) * _force);
+        _rigidbody2D.AddForce(new Vector3(x, Random.RandomRange(0.3f,0.5f), 0f) * _force);
     }
     public void ResetCoin()
     {
@@ -44,10 +44,7 @@ public class Item : MonoBehaviour
             GetComponent<CircleCollider2D>().enabled = false;
             StartCoroutine(WaitAddToPool());
  
-        }//else if(collision.gameObject.CompareTag("BodyPlayer")|| collision.gameObject.CompareTag("Coin"))
-        //{
-        
-        //}
+        }
     }
    IEnumerator WaitAddToPool()
     {
@@ -55,6 +52,7 @@ public class Item : MonoBehaviour
         yield return new WaitForSeconds(0.35f);
         StateIdle();
         yield return new WaitForSeconds(0.1f);
+
         this.gameObject.SetActive(false);
     }
   public void StateIdle()

@@ -31,7 +31,9 @@ public class AlwaysPresent : Singleton<AlwaysPresent>
     }
     public void DisplayNotiFeVer(string NotiTxt)
     {
+        _notificationFiver.GetComponent<Notification>().notificationTxt.GetComponent<Text>().color = new Color32(255, 0, 0, 255);
         _notificationFiver.GetComponent<Notification>().notificationTxt.text = NotiTxt.ToString();
         _notificationFiver.gameObject.SetActive(true);
+
     }
 }

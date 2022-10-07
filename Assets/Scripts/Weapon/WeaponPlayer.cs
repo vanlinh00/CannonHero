@@ -39,7 +39,7 @@ public class WeaponPlayer : Weapon
     IEnumerator WaitShoot()
     {
         _particleFirePoint.SetActive(true);
-        _bullet = ObjectPooler._instance.SpawnFromPool("Bullet" + idBullet, PosFirePoint(), _target);
+        _bullet = ObjectPooler._instance.SpawnFromPool("BulletPlayer" + idBullet, PosFirePoint(), _target);
 
         BulletPlayer bulletPlayer = _bullet.GetComponent<BulletPlayer>();
 
@@ -71,10 +71,6 @@ public class WeaponPlayer : Weapon
         StartCoroutine(Move(transform, _currentPos, _speedSnatch));
         yield return new WaitForSeconds(_speedSnatch);
     }
-    //public TrailRenderer Trailrenderer()
-    //{
-    //    return _trailRenderer;
-    //}
     public void ClearTrail()
     {
         _trailRenderer.Clear();

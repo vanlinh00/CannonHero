@@ -20,7 +20,11 @@ public class CloudController : Singleton<CloudController>
             }
         }
     }
-    private void Start()
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+    private void OnEnable()
     {
         StartCoroutine(FindPlayer());
         StartCoroutine(SetUp());
@@ -29,23 +33,39 @@ public class CloudController : Singleton<CloudController>
     {
         yield return new WaitForSeconds(0.4f);
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+
         IsFindPlayer = true;
     }
-    IEnumerator SetUp()
+
+ public  IEnumerator SetUp()
     {
         yield return new WaitForSeconds(0.4f);
         CreateWall(startPoint);
+        IsFindPlayer = true;
     }
     public void AddCloudToObjectPool()
     {       
-        GameObject FirstBgDynamic = transform.GetChild(0).gameObject;
-        FirstBgDynamic.transform.parent = ObjectPooler._instance.transform;
-        ObjectPooler._instance.AddElement("Cloud", FirstBgDynamic);
+        GameObject FirstClouds = transform.GetChild(0).gameObject;
+        FirstClouds.transform.parent = OldObjectPool._instance.transform;
+        ObjectPooler._instance.AddElement("Cloud" + GameController._instance.idBg, FirstClouds);
     }
     public void CreateWall(Vector3 Pos)
     {
         Vector3 NewPosCloud = new Vector3(CameraController._instance.transform.position.x+Pos.x, Pos.y, 0f);
-        GameObject Cloud = ObjectPooler._instance.SpawnFromPool("Cloud", NewPosCloud, Quaternion.identity);
+        GameObject Cloud = ObjectPooler._instance.SpawnFromPool("Cloud"+GameController._instance.idBg, NewPosCloud, Quaternion.identity);
         Cloud.transform.parent = transform;
+    }
+    public void ResetAllClouds()
+    {
+        GameObject Cloud;
+        int NumChild = transform.childCount;
+        for (int i = 0; i < NumChild; i++)
+        {
+            Cloud = transform.GetChild(0).gameObject;
+            Cloud.SetActive(false);
+            ObjectPooler._instance.AddElement("Cloud" + GameController._instance.idBg, Cloud);
+            Cloud.transform.parent = ObjectPooler._instance.transform;
+        }
+        IsFindPlayer = false;
     }
 }

@@ -11,9 +11,10 @@ public class WeaponEnemy : Weapon
     IEnumerator WaitShoot()
     {
         _particleFirePoint.SetActive(true);
-        _bullet = ObjectPooler._instance.SpawnFromPool("Bullet" + idBullet, PosFirePoint(), _target);
+        _bullet = ObjectPooler._instance.SpawnFromPool("BulletEnemy", PosFirePoint(), _target);
         BulletEnemy bulletEnemy = _bullet.GetComponent<BulletEnemy>();
         bulletEnemy.bulletSpeed = _bulletForce;
+        bulletEnemy.FindPosPlayer();
         yield return new WaitForSeconds(1f);
         _particleFirePoint.SetActive(false);
     }

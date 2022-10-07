@@ -18,19 +18,9 @@ public class UiController : Singleton<UiController>
         base.Awake();
         RestartBtn.onClick.AddListener(RestartGame);
     }
-    private void OnEnable()
+    private void Start()
     {
-        InforPlayer inforPlayer = DataPlayer.GetInforPlayer();
-
-        if (inforPlayer.isLoadGameAgain)
-        {
-            DataPlayer.UpdataLoadGameAgain(false);
-            OpenGamePlayAgain();
-        }
-        else
-        {
-            OpenGameHome();
-        }
+        OpenGameHome();
         StartCoroutine(WaitTimeEnableSound());
     }
     IEnumerator WaitTimeEnableSound()
@@ -110,8 +100,4 @@ public class UiController : Singleton<UiController>
         yield return new WaitForSeconds(0.0001f);
         OpenGameOver();
     }
-    //public GameObject GetAllwaysPresent()
-    //{
-    //    return _allwaysPresentPanel;
-    //}
 }

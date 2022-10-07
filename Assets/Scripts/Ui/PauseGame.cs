@@ -22,12 +22,20 @@ public class PauseGame : MonoBehaviour
     private void RestartGame()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene(0);
+
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
+        GameController._instance.LoadScenceAgain();
+        UiController._instance.OpenGamePlay();
+        GamePlay._instance.CountScore();
     }
     public void GotoHome()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene(0);
+
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
+        GameController._instance.LoadScenceAgain();
+        UiController._instance.OpenGameHome();
+        GamePlay._instance.CountScore();
     }
     public void PlayGame()
     {

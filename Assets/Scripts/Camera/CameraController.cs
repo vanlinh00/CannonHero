@@ -7,15 +7,9 @@ public class CameraController : Singleton<CameraController>
     public GameObject player;
     private Vector3 offset;
     private bool _isMove=false;
-
-    private void Start()
+    public void SetUp(GameObject Player)
     {
-        StartCoroutine(WaitTimeLoadPlayer());
-    }
-    IEnumerator WaitTimeLoadPlayer()
-    {
-        yield return new WaitForSeconds(1f);
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = Player;
         offset.x = transform.position.x - player.transform.position.x;
         offset.y = transform.position.y - player.transform.position.y;
         _isMove = true;

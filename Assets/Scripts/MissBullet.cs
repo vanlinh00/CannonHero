@@ -31,7 +31,7 @@ public class MissBullet : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Bullet"))
         {    
-            GameController._instance.IsGameOver = true;
+            GameController._instance.isGameOver = true;
             collision.gameObject.SetActive(false);
         }
     }
