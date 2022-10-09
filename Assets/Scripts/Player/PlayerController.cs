@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Animator _animator;
 
     public Vector3 startPos;
-
     // Rotate Head
     public bool isRotateHead = false;
     public enum StatePlayer
@@ -32,39 +31,14 @@ public class PlayerController : MonoBehaviour
     public StatePlayer statePlayer;
     public bool isEnableTrail=true;
 
-    public bool isMove = false;
-    [SerializeField] float _moveSpeed;
-    public Vector3 target;
-    public bool isEnableStateIdle = true;
+
     private void Start()
     {
         _localPosComponent = new List<Vector3>();
         StateIdle();
         _weapon = Weapon.GetComponent<WeaponPlayer>();
     }
-    private void FixedUpdate()
-    {
-        if (isMove)
-        {
-            var step = _moveSpeed * Time.deltaTime;
-             transform.position = Vector3.MoveTowards(transform.position, target, step);
-            if (Vector3.Distance(transform.position, target) == 0f)
-            {   
-                isMove = false;
-                GameController._instance.isPlayMove = false;
-                isEnableStateIdle = true;
-                isEnableTrail = true;
-            }
-        }
-        else
-        {
-            if (isEnableStateIdle)
-            {
-                StateIdle();
-                isEnableStateIdle = false;
-            }
-        }
-    }
+
     public WeaponPlayer GetWeapon()
     {
         return _weapon;
@@ -135,6 +109,7 @@ public class PlayerController : MonoBehaviour
    public void RecurrectPlayer()
     {
         GetWeapon().ResetRotation();
+        GetWeapon().SetEnableTrail();
         ResetComponentInPlayer();
         statePlayer = StatePlayer.Living;
         GameController._instance.statePlayer = StatePlayer.Living; 
@@ -166,10 +141,5 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("IsRun", false);
         _animator.SetBool("RotateHead", true);
     }   
-    public void MoveToNextPillar()
-    {
-        isMove = true;
-        GameController._instance.isPlayMove = true;
-        StateRun();
-    }
+
 }

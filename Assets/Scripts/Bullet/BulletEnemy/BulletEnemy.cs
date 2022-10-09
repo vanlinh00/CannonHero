@@ -18,8 +18,12 @@ public class BulletEnemy : BaseBullet, Iflyable
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-       ObjectPooler._instance.AddElement("BulletEnemy", this.gameObject);
-       gameObject.SetActive(false);
+        if(collision.gameObject.CompareTag("Player"))
+         {
+            ObjectPooler._instance.AddElement("BulletEnemy", this.gameObject);
+            gameObject.SetActive(false);
+         }
+     
     }
 
     public void Fly()

@@ -68,6 +68,7 @@ public class EnemyController : MonoBehaviour
         {
             Vector3 PosCoin = new Vector3(_head.transform.position.x, _head.transform.position.y + 0.2f, 0f);
             gameObject.transform.parent.transform.parent.GetComponent<Pillar>().BornCoins(PosCoin);
+
             if (GameController._instance.isFever)
             {
                 gameObject.transform.parent.transform.parent.GetComponent<Pillar>().BornDiamonds(PosCoin);
@@ -86,15 +87,21 @@ public class EnemyController : MonoBehaviour
             _body.GetComponent<BoxCollider2D>().enabled = false;
             _feet.GetComponent<BoxCollider2D>().enabled = false;
        }
+       StartCoroutine(WaitTimeResetDie());
+    }
+    IEnumerator WaitTimeResetDie()
+    {
+        yield return new WaitForSeconds(2f);
+        Destroy(gameObject.GetComponent<Rigidbody2D>());
     }
     public void AddRigibody()
     {
        _rigidbody2D = gameObject.AddComponent<Rigidbody2D>();
     }
-    public void RemoveRigibody()
-    {
-        Destroy(gameObject.GetComponent<Rigidbody2D>());
-    }
+    //public void RemoveRigibody()
+    //{
+    //    Destroy(gameObject.GetComponent<Rigidbody2D>());
+    //}
     void WeaPonRotateToPlayer()
     {
         Vector3 VectorA = _weapon.PosFirePoint() -Weapon.transform.position;
@@ -121,10 +128,9 @@ public class EnemyController : MonoBehaviour
         isBornCoin = true;
         isCurrentEnemy = false;
         _weapon = Weapon.GetComponent<WeaponEnemy>();
-
         _stateEnemy = StateEnemy.Living;
         transform.localPosition = _posEnemy;
-        transform.rotation = Quaternion.Euler(0, 0, 0);
+        transform.localRotation = Quaternion.identity;
         isCurrentEnemy = false;
 
         _head.SetActive(true);
@@ -139,5 +145,10 @@ public class EnemyController : MonoBehaviour
         isHitHead = false;
         isHitBody = false;
         isHitFeet = false;
+
+    }
+    public void ResetLocalRota()
+    {
+        transform.localRotation = Quaternion.identity;
     }
 }

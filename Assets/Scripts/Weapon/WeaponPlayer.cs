@@ -11,6 +11,7 @@ public class WeaponPlayer : Weapon
     [SerializeField] Vector3 _currentPos;
 
     [SerializeField] TrailRenderer _trailRenderer;
+    [SerializeField] GameObject _support;
     [SerializeField] GameObject _ferverParticle;
 
     public void AutoRotate()
@@ -63,7 +64,6 @@ public class WeaponPlayer : Weapon
     //Snatch gun
     IEnumerator Snatch()
     {
-        Debug.Log("Snatch");
         _targetPos = new Vector3(transform.position.x - 0.14f, transform.position.y, 0);
         _currentPos = new Vector3(transform.position.x, transform.position.y, 0);
         StartCoroutine(Move(transform, _targetPos, _speedSnatch));
@@ -75,10 +75,12 @@ public class WeaponPlayer : Weapon
     {
         _trailRenderer.Clear();
         _trailRenderer.gameObject.SetActive(false);
+        _support.SetActive(false);
     }
     public void SetEnableTrail()
     {
         _trailRenderer.gameObject.SetActive(true);
+        _support.SetActive(true);
     }
     public void SetActiveFeverParticle(bool res)
     {

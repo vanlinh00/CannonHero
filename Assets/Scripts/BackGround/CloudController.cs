@@ -4,68 +4,25 @@ using UnityEngine;
 
 public class CloudController : Singleton<CloudController>
 {
-    public bool IsFindPlayer = false;
-    private PlayerController _player;
-    [SerializeField] Vector3 finalPoint;
-    [SerializeField] Vector3 startPoint;
-
-    public void FixedUpdate()
+    [SerializeField] float _startPoX;
+    [SerializeField] float _startPoY;
+    [SerializeField] float _limitPosX;
+    [SerializeField] float _speed;
+   public void Init()
     {
-        if(IsFindPlayer)
-        {
-            if (transform.GetChild(0).position.x<=finalPoint.x+CameraController._instance.transform.position.x)
-            {
-                CreateWall(startPoint);
-                AddCloudToObjectPool();
-            }
-        }
-    }
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-    private void OnEnable()
-    {
-        StartCoroutine(FindPlayer());
-        StartCoroutine(SetUp());
-    }
-    IEnumerator FindPlayer()
-    {
-        yield return new WaitForSeconds(0.4f);
-        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-
-        IsFindPlayer = true;
-    }
-
- public  IEnumerator SetUp()
-    {
-        yield return new WaitForSeconds(0.4f);
-        CreateWall(startPoint);
-        IsFindPlayer = true;
-    }
-    public void AddCloudToObjectPool()
-    {       
-        GameObject FirstClouds = transform.GetChild(0).gameObject;
-        FirstClouds.transform.parent = OldObjectPool._instance.transform;
-        ObjectPooler._instance.AddElement("Cloud" + GameController._instance.idBg, FirstClouds);
-    }
-    public void CreateWall(Vector3 Pos)
-    {
-        Vector3 NewPosCloud = new Vector3(CameraController._instance.transform.position.x+Pos.x, Pos.y, 0f);
-        GameObject Cloud = ObjectPooler._instance.SpawnFromPool("Cloud"+GameController._instance.idBg, NewPosCloud, Quaternion.identity);
+        GameObject Cloud = ObjectPooler._instance.SpawnFromPool("Cloud" + GameController._instance.idBg,new Vector3(_startPoX,Random.RandomRange(_startPoY,_startPoY+1f),0), Quaternion.identity);
+        Cloud cloud = Cloud.GetComponent<Cloud>();
+        cloud.speed = Random.RandomRange(_speed - 0.2f, _speed + 0.2f);
+        cloud.startX = _startPoX;
+        cloud.limitX = _limitPosX;
+        cloud.startY = _startPoY;
         Cloud.transform.parent = transform;
     }
-    public void ResetAllClouds()
+    public void ResetClouds()
     {
-        GameObject Cloud;
-        int NumChild = transform.childCount;
-        for (int i = 0; i < NumChild; i++)
-        {
-            Cloud = transform.GetChild(0).gameObject;
-            Cloud.SetActive(false);
-            ObjectPooler._instance.AddElement("Cloud" + GameController._instance.idBg, Cloud);
-            Cloud.transform.parent = ObjectPooler._instance.transform;
-        }
-        IsFindPlayer = false;
+        GameObject Cloud = transform.GetChild(0).gameObject;
+        Cloud.SetActive(false);
+        ObjectPooler._instance.AddElement("Cloud" + GameController._instance.idBg, Cloud);
+        Cloud.transform.parent = ObjectPooler._instance.transform;
     }
 }

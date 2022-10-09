@@ -69,8 +69,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.000850596, y: -0.0029667022}
-  m_Size: {x: 0.08675226, y: 0.06874938}
+  m_Offset: {x: -0.0008506019, y: -0.05244235}
+  m_Size: {x: 0.16770081, y: 0.16770081}
   m_Direction: 1
 --- !u!114 &1568383590414058238
 MonoBehaviour:
@@ -85,7 +85,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 1545129872993498065}
-  bulletSpeed: 11
+  bulletSpeed: 0
   _localScale: {x: 0.5, y: 0.5, z: 0}
   stateBullet: 0
   _exploteParticle: {fileID: 3526720435102859120}

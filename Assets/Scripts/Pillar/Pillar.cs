@@ -9,10 +9,6 @@ public class Pillar : MonoBehaviour
     [SerializeField] GameObject _bodyPillar;
     [SerializeField] Animator _animator;
 
-    //private void Start()
-    //{
-    //    _enemyController=_enemy.GetComponent<EnemyController>();
-    //}
     public GameObject GetEnemy()
     {
         return _enemy;
@@ -23,11 +19,12 @@ public class Pillar : MonoBehaviour
     }
     public void ResetPillar()
     {
+       // _enemyController.RemoveRigibody();
         StateIdle();
         _enemyController.isBornCoin = true;
-        _enemyController.RemoveRigibody();
         _enemyController.ResetEnemy();
         _enemyController.GetWeapon().ResetRotation();
+
     }
     public void SetEnabledColliderInBody(bool Res)
     {
@@ -37,7 +34,7 @@ public class Pillar : MonoBehaviour
     {
      List<GameObject> ListCoins = ItemManager._instance.BonrCoins(GameController._instance.AmountCoin(), PosCoin);
 
-      foreach(GameObject Coin in ListCoins)
+        foreach (GameObject Coin in ListCoins)
         {
             Coin.transform.parent = transform;
         }

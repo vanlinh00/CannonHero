@@ -19,15 +19,15 @@ public class ItemManager : Singleton<ItemManager>
         Vector3 NewPos;
         for (int i = 0; i <= Number; i++)
         {
-            NewPos = new Vector3(PosCoin.x + Random.RandomRange(-0.3f, 0.3f), PosCoin.y + Random.RandomRange(-0.3f, 0.3f), 0f);
-            GameObject NewCoin = ObjectPooler._instance.SpawnFromPool("Coin", NewPos, Quaternion.identity);
+           NewPos = new Vector3(PosCoin.x + Random.RandomRange(-0.3f, 0.3f), PosCoin.y + Random.RandomRange(-0.3f, 0.3f), 0f);
+            GameObject NewCoin = ObjectPooler._instance.SpawnFromPool("Coin", PosCoin, Quaternion.identity);
             NewCoin.SetActive(false);
             NewCoin.SetActive(true);
 
             Item CoinSc = NewCoin.GetComponent<Item>();
             CoinSc.ResetCoin();
             CoinSc.StateIdle();
-            CoinSc.AddForce();
+           CoinSc.AddForce();
             _listObectCoins.Add(NewCoin);
 
         }
@@ -46,7 +46,7 @@ public class ItemManager : Singleton<ItemManager>
             Item CoinSc = NewCoin.GetComponent<Item>();
             CoinSc.ResetCoin();
             CoinSc.StateIdle();
-            CoinSc.AddForce();
+          //  CoinSc.AddForce();
             _listObectDiamond.Add(NewCoin);
         }
         return _listObectDiamond;

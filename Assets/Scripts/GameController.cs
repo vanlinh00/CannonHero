@@ -17,7 +17,7 @@ public class GameController : Singleton<GameController>
     [SerializeField] GameObject _regionShop;
 
     private bool _canClick;
-    private bool _isNextCol = false;
+    public bool isNextCol = false;
     private int _currentScore;
     private int _currentCoins;
     public bool isOnShop = false;
@@ -31,16 +31,17 @@ public class GameController : Singleton<GameController>
     public int idHeroPlaying;
     public int idBg;
 
-    public bool isPlayMove = false;
-
     public StatePlayer statePlayer;
+
+    [SerializeField] GameObject BackGrounds;
+    public bool isMove;
     protected override void Awake()
     {
         base.Awake();
     }
     private void Start()
     {
-        _isNextCol = true;
+        isNextCol = true;
         idHeroPlaying = DataPlayer.GetInforPlayer().idHeroPlaying;
     }
     public void SetupPlayer(GameObject Player)
@@ -62,9 +63,9 @@ public class GameController : Singleton<GameController>
         {
             return;
         }
-        if(!isOnShop&&!_player.isMove)
+        if(!isOnShop)
         {
-            if (Input.GetMouseButton(0) && !_player.isRotation && _isNextCol)
+            if (Input.GetMouseButton(0) && !_player.isRotation && isNextCol)
             {
                 _player.RotateHead();
                 _player.RotateWeapon();
@@ -75,9 +76,9 @@ public class GameController : Singleton<GameController>
                     isSoundRifleCock = true;
                 }
             }
-            if (Input.GetMouseButtonUp(0) && !_player.isShoot && _isNextCol)
+            if (Input.GetMouseButtonUp(0) && !_player.isShoot && isNextCol)
             {
-                _isNextCol = false;
+                isNextCol = false;
                 _player.isShoot = true;
                 _player.isRotation = true;
                 _player.isRotateHead = false;
@@ -89,31 +90,19 @@ public class GameController : Singleton<GameController>
             {   
                 if (isGameOver&& !isShowGameOver)
                 {
-                    AlwaysPresent._instance.DisplayNoti("Miss");
+                    AlwaysPresent._instance.DisplayNoti("MISS");
                     isShowGameOver = true;
                 }
                 if (_currentEnemy._stateEnemy == EnemyController.StateEnemy.Die)
                 {
+                    _player.StateRun();
                     _player.isShoot = false;
                     GamePlay._instance.CountScore();
-
                     UpdateNoti();
                     UpdatePlayer();
-
-                    StartCoroutine(WaitTimePlayerMove());
-                    StartCoroutine(WaitTimePlayerMoveToNextPillar());
-                    StartCoroutine(WaitTimeAddItimetimeToPool());
-                    StartCoroutine(WaitTimeAddBornPillar());
-
-                    BackGroundDynamic._instance.isCrateBg = true;
-                    WallController._instance.isCrateWall = true;
-                    WallController._instance.BornNewWall();
-                    WallController._instance.AddWallToObjectPool();
-
+                    _pillarController.MoveToTarget();
                     UpdateCurrentEnemy(1);
-
                 }
-
                 if (_player.statePlayer == PlayerController.StatePlayer.Die)
                 {
                     _player.isShoot = false;
@@ -147,39 +136,23 @@ public class GameController : Singleton<GameController>
             }
         }
     }
-    IEnumerator WaitTimePlayerMove()
+    public void PassNextPillar()
     {
-        yield return new WaitForSeconds(0.2f);
-        _player.MoveToNextPillar();
-    }
-    IEnumerator WaitTimePlayerMoveToNextPillar()
-    {
-        yield return new WaitForSeconds(0.4f);
-        _isNextCol = true;
-    }
-    IEnumerator WaitTimeAddItimetimeToPool()
-    {
-        yield return new WaitForSeconds(0.35f);
+        isNextCol = true;
+        isMove = false;
+        _player.GetWeapon().SetEnableTrail();
+        _player.StateIdle();
         ItemManager._instance.AddCoinsToPool();
         ItemManager._instance.AddDiamondToPool();
-    }
-
-    IEnumerator WaitTimeAddBornPillar()
-    {
-        yield return new WaitForSeconds(0.35f);
-        _pillarController.BonrNextNewPillar();
     }
 
     public void UpdatePlayer()
     {
         _player.GetWeapon().ResetRotation();
-        _player.target = NewPosPlayer();
         _player.isRotation = false;
+      
     }
-    public Vector3 NewPosPlayer()
-    {
-        return new Vector3(_pillarController.transform.GetChild(0).transform.position.x+Random.RandomRange(1f,2f), _player.transform.position.y, 0);
-    }
+
     void UpdateCurrentEnemy(int NumberPillar)
     {   
         _currentPillar = _pillarController.gameObject.transform.GetChild(NumberPillar).GetComponent<Pillar>();
@@ -266,7 +239,7 @@ public class GameController : Singleton<GameController>
         _currentEnemy.GetWeapon().ResetRotation();
         _currentEnemy.isCurrentEnemy = true;
         _player.isRotation = false;
-        _isNextCol = true;
+        isNextCol = true;
         _player.RecurrectPlayer();
     }
     public void SetActiveRegionShop(bool res)
@@ -276,11 +249,10 @@ public class GameController : Singleton<GameController>
 
     public void LoadDataGame()
     {
-         idBg = Random.RandomRange(1, 3);
+         idBg = Random.RandomRange(1, 4);
          _pillarController.SetUpGame();
-         WallController._instance.SetUp();
-         BackGroundDynamic._instance.SetUp();
-        BackGroundStatic._instance.LoadBackGroundStatic();
+        WallController._instance.Init();
+        BackGrounds.GetComponent<BackGrounds>().Init();
     }
     public void EnableSoundRifleCock()
     {
@@ -293,16 +265,14 @@ public class GameController : Singleton<GameController>
 
         _pillarController.ResetPillarController();
         WallController._instance.ResetAllWalls();
-        BackGroundDynamic._instance.ResetAllBackGroundDynamic();
-        BackGroundStatic._instance.ResetBgStatic();
-        CloudController._instance.ResetAllClouds();
-        StartCoroutine(CloudController._instance.SetUp());
+        BackGrounds.GetComponent<BackGrounds>().ResetBg();
+
         CameraController._instance.transform.position = new Vector3(0, 0, -10f);
         _player.RecurrectPlayer();
         _player.transform.position = _player.startPos;
          isGameOver = false;
         _player.isRotation = false;
-        _isNextCol = true;
+        isNextCol = true;
         isShowGameOver = false;
 
         ResetScore();

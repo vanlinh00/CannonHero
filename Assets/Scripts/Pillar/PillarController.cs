@@ -7,7 +7,39 @@ public class PillarController : MonoBehaviour
 {
     [SerializeField] float _moveTime;
     [SerializeField] float _dis2Pillar = 4.76f;
+    public Vector3 target;
+    private void FixedUpdate()
+    {
+        if(GameController._instance.isMove)
+        {
+            var step = _moveTime * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, target, step);
+            if (Vector3.Distance(transform.position, target) == 0f)
+            {
+                BonrNextNewPillar();
+                GameController._instance.PassNextPillar();
+            }
+        }
+       
+    }
+    public void MoveToTarget()
+    {
+        StartCoroutine(WaitTimeMoveToTarget());
+    }
+    IEnumerator WaitTimeMoveToTarget()
+    {
+        yield return new WaitForSeconds(0.5f);
+        target = FindNewPosAllsPillar();
+        GameController._instance.isMove = true;
 
+    }
+    public Vector3 FindNewPosAllsPillar()
+    {
+        float x = Random.RandomRange(0.95f, 2f);
+        Vector3 SecondPillar = transform.GetChild(1).transform.localPosition;
+        Vector3 PosAllsPillar = transform.position;
+        return new Vector3(x - SecondPillar.x, PosAllsPillar.y, 0f);
+    }
     public void SetUpGame()
     {
         Vector3 PosFristPillar = new Vector3(1.67f, Random.RandomRange(-3.88f, -2.4f), 0);
@@ -29,9 +61,11 @@ public class PillarController : MonoBehaviour
     public void CreateNewPillar(Vector3 PosLastPillar)
     {
         GameObject NewPillar = ObjectPooler._instance.SpawnFromPool("Pillar"+GameController._instance.idBg, PosLastPillar, Quaternion.identity);
+        NewPillar.transform.parent = transform;
         NewPillar.GetComponent<Pillar>().SetEnabledColliderInBody(true);
         NewPillar.GetComponent<Pillar>().ResetPillar();
-        NewPillar.transform.parent = transform;
+
+
     }
     public void AddPillarToObjectPool(GameObject ObjFirstPillar)
     {
@@ -54,7 +88,5 @@ public class PillarController : MonoBehaviour
             ObjectPooler._instance.AddElement("Pillar" + GameController._instance.idBg, Pillar);
             Pillar.transform.parent = ObjectPooler._instance.transform;
         }
-
-
     }
 }

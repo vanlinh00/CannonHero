@@ -9,7 +9,6 @@ public class LoadData : Singleton<LoadData>
     {
         GameObject Player= LoadDataPlayer();
         GameController._instance.SetupPlayer(Player);
-        CameraController._instance.SetUp(Player);
         GameController._instance.LoadDataGame();
         LoadDateEnemy();
 

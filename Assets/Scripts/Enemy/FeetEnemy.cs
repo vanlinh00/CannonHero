@@ -9,10 +9,22 @@ public class FeetEnemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
-            _particleBoolFeetEnemy.SetActive(true);
-            gameObject.transform.parent.GetComponent<EnemyController>().isHitFeet = true;
-            gameObject.transform.parent.GetComponent<EnemyController>().Die();
+            ColliderBullet();
         }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            ColliderBullet();
+        }
+
+    }
+    void ColliderBullet()
+    {
+        _particleBoolFeetEnemy.SetActive(true);
+        gameObject.transform.parent.GetComponent<EnemyController>().isHitFeet = true;
+        gameObject.transform.parent.GetComponent<EnemyController>().Die();
     }
     public void SetActiveParticleBoolFeetEnemy(bool res)
     {

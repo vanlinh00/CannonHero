@@ -62,7 +62,7 @@ Transform:
   m_Children:
   - {fileID: 2362220145444680322}
   m_Father: {fileID: 2362220144291017007}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &2729063586600162453
 Animator:
@@ -131,7 +131,7 @@ Transform:
   m_LocalScale: {x: 0.59404016, y: 0.45057726, z: 1}
   m_Children: []
   m_Father: {fileID: 2362220144291017007}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2362220143925773346
 SpriteRenderer:
@@ -212,6 +212,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2362220145482898388}
+  - {fileID: 2782695669880375893}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -327,7 +328,7 @@ GameObject:
   - component: {fileID: 2362220144226471665}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -344,7 +345,7 @@ Transform:
   m_LocalScale: {x: 0.65, y: 0.55924445, z: 1}
   m_Children: []
   m_Father: {fileID: 2362220144291017007}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2362220144226471667
 SpriteRenderer:
@@ -544,7 +545,6 @@ Transform:
   m_LocalPosition: {x: 0.013, y: 3.591, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2782695669880375893}
   - {fileID: 2362220143925773345}
   - {fileID: 2362220145100303566}
   - {fileID: 2362220144226471664}
@@ -578,7 +578,7 @@ MonoBehaviour:
   isHitHead: 0
   isHitBody: 0
   isHitFeet: 0
-  _player: {fileID: 0}
+  player: {fileID: 0}
   _stateEnemy: 0
 --- !u!1 &2362220144585578306
 GameObject:
@@ -593,7 +593,7 @@ GameObject:
   - component: {fileID: 2362220144585578316}
   m_Layer: 0
   m_Name: Feet
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -612,7 +612,7 @@ Transform:
   - {fileID: 2362220145792234484}
   - {fileID: 2362220144275618433}
   m_Father: {fileID: 2362220144291017007}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &2362220144585578317
 BoxCollider2D:
@@ -668,7 +668,7 @@ GameObject:
   - component: {fileID: 2729063585472217404}
   m_Layer: 0
   m_Name: Head
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -686,7 +686,7 @@ Transform:
   m_Children:
   - {fileID: 755882159514757947}
   m_Father: {fileID: 2362220144291017007}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2362220145100303561
 SpriteRenderer:
@@ -1174,11 +1174,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2782695669880375896}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.15, z: 0}
+  m_LocalPosition: {x: 0.013, y: 3.441, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2362220144291017007}
-  m_RootOrder: 0
+  m_Father: {fileID: 2362220143936239250}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &2782695669880375898
 ParticleSystem:
@@ -8633,15 +8633,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b87f65b8bb9df1146ae25a219ede75fa, type: 3}
---- !u!4 &1924281121414510631 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1218599268461742404, guid: b87f65b8bb9df1146ae25a219ede75fa,
-    type: 3}
-  m_PrefabInstance: {fileID: 746822279799796067}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1924281121414510810 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1218599268461742521, guid: b87f65b8bb9df1146ae25a219ede75fa,
+    type: 3}
+  m_PrefabInstance: {fileID: 746822279799796067}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1924281121414510631 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1218599268461742404, guid: b87f65b8bb9df1146ae25a219ede75fa,
     type: 3}
   m_PrefabInstance: {fileID: 746822279799796067}
   m_PrefabAsset: {fileID: 0}

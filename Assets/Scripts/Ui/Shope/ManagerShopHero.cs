@@ -90,12 +90,12 @@ public class ManagerShopHero : Singleton<ManagerShopHero>
         //UiController._instance.OpenGameHome();
         //GameController._instance.LoadScenceAgain();
         //LoadData._instance.LoadDataPlayer();
-         SceneManager.LoadScene(0);
+        SceneManager.LoadScene(0);
     }
     public void DisableCurrentHero()
     {
-        //GameObject Player = GameObject.FindGameObjectWithTag("Player");
-        //Player.transform.parent = ObjectPooler._instance.transform;
-        //Player.SetActive(false);
+        GameObject Player = GameObject.FindGameObjectWithTag("Player");
+        Player.transform.parent = ObjectPooler._instance.transform;
+        Player.SetActive(false);
     }   
 }
