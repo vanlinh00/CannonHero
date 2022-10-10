@@ -4858,7 +4858,7 @@ GameObject:
   - component: {fileID: 3517693657584885879}
   m_Layer: 0
   m_Name: Head
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5633,7 +5633,7 @@ GameObject:
   - component: {fileID: 3874931683068278279}
   m_Layer: 0
   m_Name: Feet
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5851,7 +5851,7 @@ GameObject:
   - component: {fileID: 3874931683377508282}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

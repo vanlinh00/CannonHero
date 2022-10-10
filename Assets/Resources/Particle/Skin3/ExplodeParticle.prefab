@@ -4825,3 +4825,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67e028d1b4f279a49a43a6d87c7c8dfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBullet: 1
+  _timeWait: 0

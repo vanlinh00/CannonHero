@@ -4826,3 +4826,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBullet: 2
+  _timeWait: 1

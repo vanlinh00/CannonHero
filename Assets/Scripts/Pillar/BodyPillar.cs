@@ -12,4 +12,11 @@ public class BodyPillar : MonoBehaviour
             GameController._instance.isGameOver = true;
         }
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Bullet") || collision.gameObject.CompareTag("SmallBullet9"))
+          {
+            transform.parent.parent.GetComponent<Pillar>().StateShock();
+        }
+    }
 }

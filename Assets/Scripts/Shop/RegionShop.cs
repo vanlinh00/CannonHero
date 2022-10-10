@@ -23,7 +23,7 @@ public class RegionShop : Singleton<RegionShop>
     }
     public void LoadAllHero()
     {
-        for(int i=1;i<=7;i++)
+        for(int i=1;i<=9;i++)
         {
             GameObject Player = Instantiate(Resources.Load("ShopHero/Hero" + i, typeof(GameObject)), new Vector3(0,0,0), Quaternion.identity) as GameObject;
             Player.SetActive(false);    

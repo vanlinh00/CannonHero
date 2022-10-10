@@ -16,7 +16,8 @@ public class BodyEnemy : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Bullet"))
+        
+        if (collision.gameObject.CompareTag("Bullet")|| collision.gameObject.CompareTag("SmallBullet9"))
         {
             _particleBoolBodyEnemy.SetActive(true);
             gameObject.transform.parent.GetComponent<EnemyController>().isHitBody = true;

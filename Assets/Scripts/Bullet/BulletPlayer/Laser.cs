@@ -5,9 +5,6 @@ using UnityEngine;
 public class Laser : BulletPlayer, Iflyable
 {
 	private SpriteRenderer sr;
-
-	private Vector3 ori_pos;
-
 	private Vector3 ori_scale;
 
 	private bool isHit;
@@ -16,7 +13,6 @@ public class Laser : BulletPlayer, Iflyable
     private void OnEnable()
     {
 		sr = GetComponent<SpriteRenderer>();
-		ori_pos = base.transform.position;
 		ori_scale = base.transform.localScale;
 		isHit = false;
 	}
@@ -26,11 +22,11 @@ public class Laser : BulletPlayer, Iflyable
 		{
 			if (sr.color.a > 0f)
 			{
-				if (base.transform.localScale.y > 0f)
-				{
-					base.transform.localScale -= new Vector3(0f, ori_scale.y / 50f, 0f);
-				}
-				sr.color -= new Color(0f, 0f, 0f, 0.025f);
+                if (base.transform.localScale.y > 0f)
+                {
+                    base.transform.localScale -= new Vector3(0f, ori_scale.y / 50f, 0f);
+                }
+                sr.color -= new Color(0f, 0f, 0f, 0.025f);
 				if (sr.color.a <= 0f)
 				{
 					Renew();
@@ -44,7 +40,7 @@ public class Laser : BulletPlayer, Iflyable
 	}
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
 			GetComponent<BoxCollider2D>().enabled = false;
         }
@@ -53,7 +49,8 @@ public class Laser : BulletPlayer, Iflyable
 	}
 	void Renew()
     {
-		sr.color = new Color(1f, 0f, 0f, 1f);
+		//sr.color = new Color(1f, 0f, 0f, 1f);
+		sr.color = new Color(Random.RandomRange(0, 1f), Random.RandomRange(0, 1f), Random.RandomRange(0, 1f), 1f);
 		base.transform.localScale = ori_scale;
 		ObjectPooler._instance.AddElement("BulletPlayer" + _idBullet, gameObject);
 		GetComponent<BoxCollider2D>().enabled = true;

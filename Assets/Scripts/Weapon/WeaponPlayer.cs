@@ -13,7 +13,7 @@ public class WeaponPlayer : Weapon
     [SerializeField] TrailRenderer _trailRenderer;
     [SerializeField] GameObject _support;
     [SerializeField] GameObject _ferverParticle;
-
+   
     public void AutoRotate()
     {
         _target = Quaternion.Euler(transform.rotation.x, transform.rotation.y, currentAngleZ);
@@ -35,11 +35,13 @@ public class WeaponPlayer : Weapon
     }
     public void Shoot()
     {
-        StartCoroutine(WaitShoot());
+            StartCoroutine(WaitShoot());
     }
     IEnumerator WaitShoot()
     {
-        _particleFirePoint.SetActive(true);
+        _currentPos = new Vector3(transform.position.x, transform.position.y, 0);
+        int NumberShot = (base.idBullet == 9|| base.idBullet == 10) ? 3 : 1;
+
         _bullet = ObjectPooler._instance.SpawnFromPool("BulletPlayer" + idBullet, PosFirePoint(), _target);
 
         BulletPlayer bulletPlayer = _bullet.GetComponent<BulletPlayer>();
@@ -56,16 +58,23 @@ public class WeaponPlayer : Weapon
         bulletPlayer.SetUp();
         bulletPlayer.bulletSpeed = _bulletForce;
         bulletPlayer.GetComponent<Iflyable>().Fly();
-        StartCoroutine(Snatch());
-        yield return new WaitForSeconds(1f);
-        _particleFirePoint.SetActive(false);
+
+        for (int i=0;i< NumberShot; i++)
+        {
+            _particleFirePoint.SetActive(true);
+            StartCoroutine(Snatch());
+            yield return new WaitForSeconds(0.2f);
+            _particleFirePoint.SetActive(false);
+        }
+
+
     }
 
     //Snatch gun
     IEnumerator Snatch()
     {
-        _targetPos = new Vector3(transform.position.x - 0.14f, transform.position.y, 0);
-        _currentPos = new Vector3(transform.position.x, transform.position.y, 0);
+        _targetPos = new Vector3(_currentPos.x - 0.14f, _currentPos.y, 0);
+
         StartCoroutine(Move(transform, _targetPos, _speedSnatch));
         yield return new WaitForSeconds(_speedSnatch);
         StartCoroutine(Move(transform, _currentPos, _speedSnatch));
@@ -85,5 +94,9 @@ public class WeaponPlayer : Weapon
     public void SetActiveFeverParticle(bool res)
     {
         _ferverParticle.SetActive(res);
+    }
+    public void DisableSupport()
+    {
+        _support.SetActive(false);
     }
 }

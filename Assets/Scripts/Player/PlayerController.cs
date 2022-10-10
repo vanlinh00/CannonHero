@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Animator _animator;
 
     public Vector3 startPos;
+
     // Rotate Head
     public bool isRotateHead = false;
     public enum StatePlayer
@@ -30,8 +31,7 @@ public class PlayerController : MonoBehaviour
     }
     public StatePlayer statePlayer;
     public bool isEnableTrail=true;
-
-
+    
     private void Start()
     {
         _localPosComponent = new List<Vector3>();
@@ -110,6 +110,7 @@ public class PlayerController : MonoBehaviour
     {
         GetWeapon().ResetRotation();
         GetWeapon().SetEnableTrail();
+        GetWeapon().DisableSupport();
         ResetComponentInPlayer();
         statePlayer = StatePlayer.Living;
         GameController._instance.statePlayer = StatePlayer.Living; 

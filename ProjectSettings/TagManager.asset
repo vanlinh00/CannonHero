@@ -11,6 +11,8 @@ TagManager:
   - MissBullet
   - HeadEnemy
   - BodyPillar
+  - SmallBullet9
+  - Enemy
   layers:
   - Default
   - TransparentFX
