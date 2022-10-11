@@ -15,7 +15,7 @@ public class Item : MonoBehaviour
     }
     public void AddForce()
     {
-        _rigidbody2D.AddForce(new Vector3(Random.RandomRange(-0.28f,0.33f), Random.RandomRange(0.3f, 0.65f), 0f) * _force);
+        _rigidbody2D.AddForce(new Vector3(Random.RandomRange(-0.28f,0.33f), Random.RandomRange(0.3f, 0.65f), 0f) * Random.RandomRange(_force-100,_force+100));
     }
     public void ResetCoin()
     {
@@ -38,12 +38,30 @@ public class Item : MonoBehaviour
             StartCoroutine(WaitAddToPool());
 
         }
-        else if(collision.gameObject.CompareTag("BodyPillar"))
+        else if (collision.gameObject.CompareTag("BodyPillar"))
         {
             GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, 100f));
         }
     }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Wall")/*|| collision.gameObject.CompareTag("HeadEnemy")|| collision.gameObject.CompareTag("BodyPillar")*/)
+    //    {
+    //        SoundController._instance.OnPlayAudio(SoundType.Coin);
+    //        AlwaysPresent._instance.CountCoins();
+    //        GetComponent<CircleCollider2D>().enabled = false;
+    //        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+    //        GetComponent<Rigidbody2D>().gravityScale = 0f;
+    //        GetComponent<Rigidbody2D>().AddTorque(500f, ForceMode2D.Force);
+    //        GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, 200f));
+    //        StartCoroutine(WaitAddToPool());
 
+    //    }
+    //    //else if (collision.gameObject.CompareTag("BodyPillar"))
+    //    //{
+    //    //    GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, 100f));
+    //    //}
+    //}
     IEnumerator WaitAddToPool()
     {
         StateReduceColor();

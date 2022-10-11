@@ -8,6 +8,7 @@ public class GamePlay : Singleton<GamePlay>
     [SerializeField] Button _pauseBtn;
     [SerializeField] Text _countScore;
     [SerializeField] Animator _animator;
+
     protected override void Awake()
     {
         base.Awake();

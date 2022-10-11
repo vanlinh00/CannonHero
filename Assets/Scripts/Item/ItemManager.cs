@@ -46,7 +46,7 @@ public class ItemManager : Singleton<ItemManager>
             Item CoinSc = NewCoin.GetComponent<Item>();
             CoinSc.ResetCoin();
             CoinSc.StateIdle();
-          //  CoinSc.AddForce();
+            CoinSc.AddForce();
             _listObectDiamond.Add(NewCoin);
         }
         return _listObectDiamond;

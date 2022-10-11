@@ -82,6 +82,7 @@ public class WeaponPlayer : Weapon
         for (int i=0;i< NumberShot; i++)
         {
             _particleFirePoint.SetActive(true);
+            SoundController._instance.OnPlayAudio(SoundType.cannon_fire);
             StartCoroutine(Snatch());
             yield return new WaitForSeconds(0.2f);
             _particleFirePoint.SetActive(false);

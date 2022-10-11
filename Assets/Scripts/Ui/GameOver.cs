@@ -30,7 +30,6 @@ public class GameOver : MonoBehaviour
     {
         SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         GameController._instance.ResurrectPlayer();
-        UiController._instance.OpenGamePlay();
     }
     private void OnEnable()
     {

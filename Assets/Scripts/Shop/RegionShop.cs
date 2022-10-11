@@ -10,16 +10,17 @@ public class RegionShop : Singleton<RegionShop>
     {
         base.Awake();
     }
-    private void Start()
+    private void OnEnable()
     {
         LoadAllHero();
         StartCoroutine(WaitLoadListHero());
+
     }
-   IEnumerator WaitLoadListHero()
+    IEnumerator WaitLoadListHero()
     {
         yield return new WaitForSeconds(0.1f);
-        _currentHeroLoading = _positionAllHeroSelect.transform.GetChild(0).gameObject;
-        LoadHero(ManagerShopHero._instance.idHeroSelect);
+        _currentHeroLoading = _positionAllHeroSelect.transform.GetChild(DataPlayer.GetInforPlayer().idHeroPlaying-1).gameObject;
+        LoadHero(DataPlayer.GetInforPlayer().idHeroPlaying);
     }
     public void LoadAllHero()
     {

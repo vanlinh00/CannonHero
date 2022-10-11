@@ -10,6 +10,10 @@ public class CoinOfPlayer : MonoBehaviour
 
     private void Start()
     {
+        DisPlayAmountCoins();
+    }
+    public void DisPlayAmountCoins()
+    {
         _coinsTxt.text = DataPlayer.GetInforPlayer().countCoins.ToString();
         StateIdle();
     }

@@ -12,17 +12,15 @@ public class GameHome : MonoBehaviour
 
     [SerializeField] Animator _animator;
     [SerializeField] Text _bestScore;
-    private void Start()
-    {
-        _bestScore.text = "Best " + DataPlayer.GetInforPlayer().bestScore.ToString();
-    }
+
      private void OnEnable()
     {
-        StartCoroutine(WaitTimeChangeSound());
+        StartCoroutine(WaitTimeLoadData());
     }
-    IEnumerator WaitTimeChangeSound()
+    IEnumerator WaitTimeLoadData()
     {
         yield return new WaitForEndOfFrame();
+        _bestScore.text = "Best " + DataPlayer.GetInforPlayer().bestScore.ToString();
         ChangeMusic();
         ChangeSound();
     }

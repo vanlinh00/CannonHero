@@ -16,6 +16,13 @@ public class ElementBtn : MonoBehaviour
     {
         _clickHeroBtn.onClick.AddListener(CheckHero);
     }
+    private void OnEnable()
+    {
+        if(DataPlayer.GetInforPlayer().idHeroPlaying==idHero)
+        {
+            _darkBg.SetActive(false);
+        }
+    }
     public void CheckHero()
     {
         RegionShop._instance.LoadHero(idHero);

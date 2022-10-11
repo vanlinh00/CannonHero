@@ -18,7 +18,10 @@ public class AlwaysPresent : Singleton<AlwaysPresent>
     {
         _tutorialObj.SetActive(res);
     }
-
+    public CoinOfPlayer CoinOfplayer()
+    {
+        return _coinOfPlayer;
+    }
     public void CountCoins()
     {
         _coinOfPlayer.CountCoins();

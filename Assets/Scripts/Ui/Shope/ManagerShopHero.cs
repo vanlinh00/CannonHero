@@ -6,17 +6,16 @@ using UnityEngine.UI;
 public class ManagerShopHero : Singleton<ManagerShopHero>   
 {
     [SerializeField] Button _comebackBtn;
-
     [SerializeField] GameObject _currentDarkClickBtn;
     public GameObject _nexDarkClickBtn=null;
-
     [SerializeField] Button _priceBtn;
     [SerializeField] Button _selectBtn;
 
     public int idHeroSelect;
     private int _priceHeroSelect;
 
-
+   [SerializeField] ScrollRect _scrollRect;
+    [SerializeField] GameObject _content;
     protected override void Awake()
     {
         base.Awake();
@@ -24,15 +23,18 @@ public class ManagerShopHero : Singleton<ManagerShopHero>
         _priceBtn.onClick.AddListener(CheckBuyHero);
        _selectBtn.onClick.AddListener(LoadGameWithHeroSelect);
     }
-    private void Start()
+
+    private void OnEnable()
     {
-        idHeroSelect = 1;
-        _priceHeroSelect = 000;
-        CheckHeroOnShop(idHeroSelect, _priceHeroSelect);
+        _currentDarkClickBtn = _content.transform.GetChild(DataPlayer.GetInforPlayer().idHeroPlaying - 1).GetChild(1).gameObject;
+       //    idHeroSelect = DataPlayer.GetInforPlayer().idHeroPlaying;
+       //_priceHeroSelect = 000;
+       // CheckHeroOnShop(idHeroSelect, _priceHeroSelect);
+        AutoScroll();
     }
-    
     public void ComeBackHome()
     {
+        idHeroSelect = DataPlayer.GetInforPlayer().idHeroPlaying;
         UiController._instance.OpenGameHome();
         CameraController._instance.GoToHome();
         GameController._instance.isOnShop = false;
@@ -53,10 +55,12 @@ public class ManagerShopHero : Singleton<ManagerShopHero>
     }
     private void CheckBuyHero()
     {
-        int AmountCoins = 10000; /*DataPlayer.GetInforPlayer().countCoins;*/
+        int AmountCoins = DataPlayer.GetInforPlayer().countCoins;
 
         if(AmountCoins>=_priceHeroSelect)
         {
+            DataPlayer.UpdateAmountCoins(DataPlayer.GetInforPlayer().countCoins - _priceHeroSelect);
+            AlwaysPresent._instance.CoinOfplayer().DisPlayAmountCoins();
             DataPlayer.AddNewIdHero(idHeroSelect);
             CheckHeroOnShop(idHeroSelect, _priceHeroSelect);
         }
@@ -92,10 +96,10 @@ public class ManagerShopHero : Singleton<ManagerShopHero>
         //LoadData._instance.LoadDataPlayer();
         SceneManager.LoadScene(0);
     }
-    public void DisableCurrentHero()
+
+    void AutoScroll()
     {
-        GameObject Player = GameObject.FindGameObjectWithTag("Player");
-        Player.transform.parent = ObjectPooler._instance.transform;
-        Player.SetActive(false);
-    }   
+        float PosScrool = DataPlayer.GetInforPlayer().idHeroPlaying / (float)10;
+        _scrollRect.horizontalNormalizedPosition = PosScrool;
+    }
 }

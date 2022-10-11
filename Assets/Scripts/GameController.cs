@@ -91,7 +91,6 @@ public class GameController : Singleton<GameController>
                     _player.isRotateHead = false;
                     _player.GetWeapon().ClearTrail();
                     _player.WeaponShoot();
-                    SoundController._instance.OnPlayAudio(SoundType.cannon_fire);
                 }
 
                 if (_player.isShoot)
@@ -273,12 +272,18 @@ public class GameController : Singleton<GameController>
     }
     public void ResurrectPlayer()
     {
-        isGameOver = false;
-        _currentEnemy.GetWeapon().ResetRotation();
-        _currentEnemy.isCurrentEnemy = true;
-        _player.isRotation = false;
-        isNextCol = true;
-        _player.RecurrectPlayer();
+        if(10<=DataPlayer.GetInforPlayer().countCoins)
+        {
+            isGameOver = false;
+            _currentEnemy.GetWeapon().ResetRotation();
+            _currentEnemy.isCurrentEnemy = true;
+            _player.isRotation = false;
+            isNextCol = true;
+            _player.RecurrectPlayer();
+            UiController._instance.OpenGamePlay();
+            DataPlayer.UpdateAmountCoins(DataPlayer.GetInforPlayer().countCoins - 10);
+        }
+        AlwaysPresent._instance.CoinOfplayer().DisPlayAmountCoins();
     }
     public void SetActiveRegionShop(bool res)
     {
