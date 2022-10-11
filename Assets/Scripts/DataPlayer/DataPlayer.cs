@@ -15,10 +15,11 @@ public class DataPlayer
             {
                 isLoadGameAgain = false,
                 bestScore = 0,
-                isOnAudio = true,
+                isOnMusicBg = true,
                 listIdHero = new List<int>() { 1 },
                 idHeroPlaying = 1,
                 countCoins = 0,
+                isOnSound = true,
 
             };
             SaveData();
@@ -46,7 +47,12 @@ public class DataPlayer
     }
     public static void ChangeStateAudio(bool IsOnAudio)
     {
-        inforPlayer.isOnAudio = IsOnAudio;
+        inforPlayer.isOnMusicBg = IsOnAudio;
+        SaveData();
+    }
+    public static void ChangeStateSound(bool IsOnAudio)
+    {
+        inforPlayer.isOnSound = IsOnAudio;
         SaveData();
     }
     public static void AddNewIdHero(int IdHero)
@@ -63,13 +69,15 @@ public class DataPlayer
     {
         return inforPlayer;
     }
+
 }
 public class InforPlayer
 {
     public bool isLoadGameAgain;
     public int bestScore;
-    public bool isOnAudio;
+    public bool isOnMusicBg;
     public List<int> listIdHero;
     public int idHeroPlaying;
     public int countCoins;
+    public bool isOnSound;
 }

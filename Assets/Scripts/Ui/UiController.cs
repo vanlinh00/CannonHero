@@ -11,7 +11,6 @@ public class UiController : Singleton<UiController>
     [SerializeField] GameObject _pauseGamePanel;
     [SerializeField] GameObject _gamePlayPanel;
     [SerializeField] GameObject _gamOverPanel;
-    [SerializeField] GameObject _allwaysPresentPanel;
     [SerializeField] GameObject _shopPanel;
     protected override void Awake()
     {
@@ -65,17 +64,21 @@ public class UiController : Singleton<UiController>
         _gameHomePanel.SetActive(true);
     }
     
-    public void OpenGameOver()
+    public void OpenGameOver(bool IsComback)
     {
         _shopPanel.SetActive(false);
         _gameHomePanel.SetActive(false);
         _pauseGamePanel.SetActive(false);
         _gamePlayPanel.SetActive(false);
-        StartCoroutine(WaitEnableGameOver());
+        StartCoroutine(WaitEnableGameOver(IsComback));
     }
-    IEnumerator WaitEnableGameOver()
+    IEnumerator WaitEnableGameOver(bool IsComback)
     {
-        yield return new WaitForSeconds(0.9f);
+        if(!IsComback)
+        {
+            yield return new WaitForSeconds(0.9f);
+
+        }
         _gamOverPanel.SetActive(true);
     }
     public void OpenPauseGame()
@@ -98,6 +101,6 @@ public class UiController : Singleton<UiController>
    public IEnumerator FadeDisPlayGameOver()
     {
         yield return new WaitForSeconds(0.0001f);
-        OpenGameOver();
+        OpenGameOver(false);
     }
 }

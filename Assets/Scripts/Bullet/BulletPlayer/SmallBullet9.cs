@@ -28,7 +28,10 @@ public class SmallBullet9 : BulletPlayer, Iflyable
         {
             if (collision.gameObject.CompareTag("Enemy"))
             {
-                SetActiveObject(false);
+                if(_idBullet == 9)
+                {
+                    SetActiveObject(false);
+                }
                 gameObject.transform.parent.GetComponent<Bullet7>().DisableColisionAllBullet();
                 StartCoroutine(WaitTimeRenew());
                 ObjectPooler._instance.SpawnFromPool("ExplodeParticle" + _idBullet, _exploteParticle.transform.position, Quaternion.identity);
@@ -37,7 +40,10 @@ public class SmallBullet9 : BulletPlayer, Iflyable
             {
                 if(collision.gameObject.CompareTag("BodyPillar"))
                 {
-                    SetActiveObject(false);
+                    if (_idBullet == 9)
+                    {
+                        SetActiveObject(false);
+                    }
                 }
                 if (!collision.gameObject.CompareTag("MissBullet"))
                 {

@@ -39,7 +39,7 @@ public class ManagerShopHero : Singleton<ManagerShopHero>
 
         if(GameController._instance.Player().statePlayer==PlayerController.StatePlayer.Die)
         {
-            UiController._instance.OpenGameOver();
+            UiController._instance.OpenGameOver(true);
         }
     }
     public void ChangeButtonClick(GameObject NextDarkBg)

@@ -12,13 +12,34 @@ public class WeaponPlayer : Weapon
 
     [SerializeField] TrailRenderer _trailRenderer;
     [SerializeField] GameObject _support;
-    [SerializeField] GameObject _ferverParticle;
+    [SerializeField] GameObject _bigFever;
+    [SerializeField] GameObject _smallFever;
    
     public void AutoRotate()
     {
         _target = Quaternion.Euler(transform.rotation.x, transform.rotation.y, currentAngleZ);
         currentAngleZ = currentAngleZ + Time.deltaTime * _speedRotate;
         transform.rotation = _target;
+
+        if (_bigFever.activeSelf)
+        {
+            _bigFever.transform.localRotation = Quaternion.Euler(0, 0, -currentAngleZ);
+        }
+        if (_smallFever.activeSelf)
+        {
+            _smallFever.transform.localRotation = Quaternion.Euler(0, 0, -currentAngleZ);
+        }
+    }
+    public void ResetRotationFever()
+    {
+        if (_bigFever.activeSelf)
+        {
+            _bigFever.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
+        if (_smallFever.activeSelf)
+        {
+            _smallFever.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
     }
     IEnumerator Move(Transform CurrentTransform, Vector3 Target, float TotalTime)
     {
@@ -43,7 +64,6 @@ public class WeaponPlayer : Weapon
         int NumberShot = (base.idBullet == 9|| base.idBullet == 10) ? 3 : 1;
 
         _bullet = ObjectPooler._instance.SpawnFromPool("BulletPlayer" + idBullet, PosFirePoint(), _target);
-
         BulletPlayer bulletPlayer = _bullet.GetComponent<BulletPlayer>();
 
         if (isFiver)
@@ -66,7 +86,6 @@ public class WeaponPlayer : Weapon
             yield return new WaitForSeconds(0.2f);
             _particleFirePoint.SetActive(false);
         }
-
 
     }
 
@@ -91,9 +110,13 @@ public class WeaponPlayer : Weapon
         _trailRenderer.gameObject.SetActive(true);
         _support.SetActive(true);
     }
-    public void SetActiveFeverParticle(bool res)
+    public void SetActiveBigFeverParticle(bool res)
     {
-        _ferverParticle.SetActive(res);
+        _bigFever.SetActive(res);
+    }
+    public void SetActiveSmallFeverParticle(bool res)
+    {
+        _smallFever.SetActive(res);
     }
     public void DisableSupport()
     {

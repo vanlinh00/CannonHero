@@ -19,7 +19,6 @@ public class GameController : Singleton<GameController>
     private bool _canClick;
     public bool isNextCol = false;
     private int _currentScore;
-    private int _currentCoins;
     public bool isOnShop = false;
     public bool isPause = false;
 
@@ -35,6 +34,7 @@ public class GameController : Singleton<GameController>
 
     [SerializeField] GameObject BackGrounds;
     public bool isMove;
+
     protected override void Awake()
     {
         base.Awake();
@@ -58,56 +58,90 @@ public class GameController : Singleton<GameController>
     public void Update()
     {
         CheckCanClick();
-
-        if (_canClick == false)
+        if (_canClick == false/*&& !isDinablePause*/)
         {
-            return;
+            if(_player.isShoot)
+            {
+
+            }
+            else
+            {
+                return;
+            }
+        
         }
-        if(!isOnShop)
-        {
-            if (Input.GetMouseButton(0) && !_player.isRotation && isNextCol)
+        if (!isOnShop)
             {
-                _player.RotateHead();
-                _player.RotateWeapon();
+                if (Input.GetMouseButton(0) && !_player.isRotation && isNextCol)
+                {
+                    _player.RotateHead();
+                    _player.RotateWeapon();
 
-                if (!isSoundRifleCock)
-                {
-                    EnableSoundRifleCock();
-                    isSoundRifleCock = true;
+                    if (!isSoundRifleCock)
+                    {
+                        EnableSoundRifleCock();
+                        isSoundRifleCock = true;
+                    }
                 }
-            }
-            if (Input.GetMouseButtonUp(0) && !_player.isShoot && isNextCol)
+                if (Input.GetMouseButtonUp(0) && !_player.isShoot && isNextCol)
+                {
+                    isNextCol = false;
+                    _player.isShoot = true;
+                    _player.isRotation = true;
+                    _player.isRotateHead = false;
+                    _player.GetWeapon().ClearTrail();
+                    _player.WeaponShoot();
+                    SoundController._instance.OnPlayAudio(SoundType.cannon_fire);
+                }
+
+                if (_player.isShoot)
+                {
+                    if (isGameOver && !isShowGameOver)
+                    {
+                        AlwaysPresent._instance.DisplayNoti("MISS");
+                        isShowGameOver = true;
+                    }
+                    if (_currentEnemy._stateEnemy == EnemyController.StateEnemy.Die)
+                    {
+                        _player.StateRun();
+                        _player.isShoot = false;
+                        GamePlay._instance.CountScore();
+                        UpdateNoti();
+                        UpdatePlayer();
+                        _pillarController.MoveToTarget();
+                        UpdateCurrentEnemy(1);
+                    }
+                    if (_player.statePlayer == PlayerController.StatePlayer.Die)
+                    {
+                        _player.isShoot = false;
+                        StartCoroutine(UiController._instance.FadeDisPlayGameOver());
+                    }
+                }
+        }
+    }
+    public void Test()
+    {
+        if (_player.isShoot)
+        {
+            if (isGameOver && !isShowGameOver)
             {
-                isNextCol = false;
-                _player.isShoot = true;
-                _player.isRotation = true;
-                _player.isRotateHead = false;
-                _player.GetWeapon().ClearTrail();
-                _player.WeaponShoot();
-                SoundController._instance.OnPlayAudio(SoundType.cannon_fire);
+                AlwaysPresent._instance.DisplayNoti("MISS");
+                isShowGameOver = true;
             }
-            if (_player.isShoot)
-            {   
-                if (isGameOver&& !isShowGameOver)
-                {
-                    AlwaysPresent._instance.DisplayNoti("MISS");
-                    isShowGameOver = true;
-                }
-                if (_currentEnemy._stateEnemy == EnemyController.StateEnemy.Die)
-                {
-                    _player.StateRun();
-                    _player.isShoot = false;
-                    GamePlay._instance.CountScore();
-                    UpdateNoti();
-                    UpdatePlayer();
-                    _pillarController.MoveToTarget();
-                    UpdateCurrentEnemy(1);
-                }
-                if (_player.statePlayer == PlayerController.StatePlayer.Die)
-                {
-                    _player.isShoot = false;
-                    StartCoroutine(UiController._instance.FadeDisPlayGameOver());
-                }
+            if (_currentEnemy._stateEnemy == EnemyController.StateEnemy.Die)
+            {
+                _player.StateRun();
+                _player.isShoot = false;
+                GamePlay._instance.CountScore();
+                UpdateNoti();
+                UpdatePlayer();
+                _pillarController.MoveToTarget();
+                UpdateCurrentEnemy(1);
+            }
+            if (_player.statePlayer == PlayerController.StatePlayer.Die)
+            {
+                _player.isShoot = false;
+                StartCoroutine(UiController._instance.FadeDisPlayGameOver());
             }
         }
     }
@@ -140,6 +174,7 @@ public class GameController : Singleton<GameController>
     {
         isNextCol = true;
         isMove = false;
+        SoundController2._instance.audioFx.loop = false;
         _player.GetWeapon().SetEnableTrail();
         _player.StateIdle();
         ItemManager._instance.AddCoinsToPool();
@@ -177,11 +212,12 @@ public class GameController : Singleton<GameController>
     }
     public void CountCoins()
     {
-        _currentCoins++;
+        int newAmountCoins = DataPlayer.GetInforPlayer().countCoins;
+        DataPlayer.UpdateAmountCoins(newAmountCoins + 1);
     }
     public int GetCurrentCoins()
     {
-        return _currentCoins;
+        return DataPlayer.GetInforPlayer().countCoins;
     }
     public int AmountCoin()
     {
@@ -204,17 +240,23 @@ public class GameController : Singleton<GameController>
     public void UpdateNoti()
     {
         _player.GetWeapon().isFiver = false;
-        _player.GetWeapon().SetActiveFeverParticle(false);
+        _player.GetWeapon().ResetRotationFever();
+        _player.GetWeapon().SetActiveBigFeverParticle(false);
+        _player.GetWeapon().SetActiveSmallFeverParticle(false);
         isFever = false;
         if (_currentEnemy.isHitHead)
         {
             CountHeadShot++;
             AlwaysPresent._instance.DisplayNoti("HEADSHOT +2PTS");
+            if(CountHeadShot==2)
+            {
+                _player.GetWeapon().SetActiveSmallFeverParticle(true);
+            }
             if (CountHeadShot==3)
             {
                 AlwaysPresent._instance.DisplayNotiFeVer("FEVER");
                 _player.GetWeapon().isFiver = true;
-                _player.GetWeapon().SetActiveFeverParticle(true);
+                _player.GetWeapon().SetActiveBigFeverParticle(true);
                 isFever = true;
                 CountHeadShot = 0;
             }
@@ -224,10 +266,6 @@ public class GameController : Singleton<GameController>
             AlwaysPresent._instance.DisplayNoti("+1PTS");
             CountHeadShot = 0;
         }
-    }
-    public float GetAmountCoins()
-    {
-        return _currentCoins;
     }
     public PlayerController Player()
     {

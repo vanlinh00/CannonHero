@@ -23,11 +23,12 @@ public class Score : MonoBehaviour
     {
         _scoreTxt.text = GameController._instance.GetCurrentScore().ToString();
         StateVibrate();
-        StartCoroutine(WaitVibrate());
-    }
-    IEnumerator WaitVibrate()
-    {
-        yield return new WaitForSeconds(0.29f);
         StateIdle();
+        // StartCoroutine(WaitVibrate());
     }
+   // IEnumerator WaitVibrate()
+    //{
+    //    //yield return new WaitForSeconds(0.29f);
+      
+    //}
 }

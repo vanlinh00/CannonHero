@@ -73,7 +73,9 @@ public class PlayerController : MonoBehaviour
         GameController._instance.statePlayer = StatePlayer.Die;
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         _animator.enabled = false;
-        _weapon.SetActiveFeverParticle(false);
+        _weapon.ResetRotationFever();
+        _weapon.SetActiveBigFeverParticle(false);
+        _weapon.SetActiveSmallFeverParticle(false);
         ParticleDead.SetActive(true);
         ParticleDead2.SetActive(true);
         BreakObjectInPlayer();

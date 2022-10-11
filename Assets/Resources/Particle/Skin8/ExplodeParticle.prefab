@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBullet: 8
-  _timeWait: 0.5
+  _timeWait: 0.8
 --- !u!1 &1156041055103393316
 GameObject:
   m_ObjectHideFlags: 0

@@ -31,7 +31,8 @@ public class PillarController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         target = FindNewPosAllsPillar();
         GameController._instance.isMove = true;
-
+        SoundController2._instance.OnPlayAudio(SoundType.footsteps_boots);
+        SoundController2._instance.audioFx.loop = true;
     }
     public Vector3 FindNewPosAllsPillar()
     {

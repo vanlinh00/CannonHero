@@ -14,12 +14,24 @@ public class GameHome : MonoBehaviour
     [SerializeField] Text _bestScore;
     private void Start()
     {
-        _bestScore.text = "Best " + DataPlayer.GetInforPlayer().bestScore.ToString();    
+        _bestScore.text = "Best " + DataPlayer.GetInforPlayer().bestScore.ToString();
+    }
+     private void OnEnable()
+    {
+        StartCoroutine(WaitTimeChangeSound());
+    }
+    IEnumerator WaitTimeChangeSound()
+    {
+        yield return new WaitForEndOfFrame();
+        ChangeMusic();
+        ChangeSound();
     }
     private void Awake()
     {
         _startGamePlayBtn.onClick.AddListener(OpenGamePlay);
         _openShopBtn.onClick.AddListener(OpenShop);
+        _musicBtn.onClick.AddListener(OnMusic);
+        _soundBtn.onClick.AddListener(OnSound);
     }
     public void OpenGamePlay()
     {
@@ -33,6 +45,7 @@ public class GameHome : MonoBehaviour
         UiController._instance.OpenShop();
         CameraController._instance.GoToShop();
     }
+
     public void In()
     {
         _animator.SetBool("out", false);
@@ -40,5 +53,43 @@ public class GameHome : MonoBehaviour
     public void Out()
     {
         _animator.SetBool("out", true);
+    }
+    public void OnMusic()
+    {
+        DataPlayer.ChangeStateAudio(!DataPlayer.GetInforPlayer().isOnMusicBg);
+        ChangeMusic();
+    }
+    public void OnSound()
+    {
+        DataPlayer.ChangeStateSound(!DataPlayer.GetInforPlayer().isOnSound);
+        ChangeSound();
+    }
+    public void ChangeMusic()
+    {
+        if (DataPlayer.GetInforPlayer().isOnMusicBg)
+        {
+            SoundBackGround._instance.OnMusic();
+            _musicBtn.GetComponent<Image>().sprite = Resources.Load<Sprite>("Audio/MusicBg2");
+        }
+        else
+        {
+            SoundBackGround._instance.OfMusic();
+            _musicBtn.GetComponent<Image>().sprite = Resources.Load<Sprite>("Audio/MusicBg1");
+        }
+    }
+    public void ChangeSound()
+    {
+        if (DataPlayer.GetInforPlayer().isOnSound)
+        {
+            SoundController._instance.OnSound();
+            SoundController2._instance.OnSound();
+            _soundBtn.GetComponent<Image>().sprite = Resources.Load<Sprite>("Audio/Sound2");
+        }
+        else
+        {
+            SoundController._instance.OfSound();
+            SoundController2._instance.OfSound();
+            _soundBtn.GetComponent<Image>().sprite = Resources.Load<Sprite>("Audio/Sound1");
+        }
     }
 }
