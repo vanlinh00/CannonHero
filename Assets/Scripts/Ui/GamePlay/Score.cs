@@ -22,13 +22,14 @@ public class Score : MonoBehaviour
     public void CountScore()
     {
         _scoreTxt.text = GameController._instance.GetCurrentScore().ToString();
+     
         StateVibrate();
-        StateIdle();
-        // StartCoroutine(WaitVibrate());
+         StartCoroutine(WaitVibrate());
     }
-   // IEnumerator WaitVibrate()
-    //{
-    //    //yield return new WaitForSeconds(0.29f);
-      
-    //}
+    IEnumerator WaitVibrate()
+    {
+        yield return new WaitForSeconds(0.03f);
+        StateIdle();
+
+    }
 }

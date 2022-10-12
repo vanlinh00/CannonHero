@@ -25,8 +25,13 @@ public class ElementBtn : MonoBehaviour
     }
     public void CheckHero()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         RegionShop._instance.LoadHero(idHero);
         ManagerShopHero._instance.ChangeButtonClick(_darkBg);
         ManagerShopHero._instance.CheckHeroOnShop(idHero,_priceHero);
+    }
+    public int GetPriceHero()
+    {
+        return _priceHero;
     }
 }

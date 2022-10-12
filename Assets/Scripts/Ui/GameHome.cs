@@ -33,11 +33,13 @@ public class GameHome : MonoBehaviour
     }
     public void OpenGamePlay()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         AlwaysPresent._instance.SetActiveTutorial(false);
         UiController._instance.OpenGamePlay();
     }
     public void OpenShop()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         GameController._instance.SetActiveRegionShop(true);
         GameController._instance.isOnShop = true;
         UiController._instance.OpenShop();
@@ -54,11 +56,13 @@ public class GameHome : MonoBehaviour
     }
     public void OnMusic()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         DataPlayer.ChangeStateAudio(!DataPlayer.GetInforPlayer().isOnMusicBg);
         ChangeMusic();
     }
     public void OnSound()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         DataPlayer.ChangeStateSound(!DataPlayer.GetInforPlayer().isOnSound);
         ChangeSound();
     }

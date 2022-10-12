@@ -14,16 +14,22 @@ public class GamePlay : Singleton<GamePlay>
         base.Awake();
         _pauseBtn.onClick.AddListener(PauseGame);
     }
+    private void OnEnable()
+    {
+        _countScore.text = 0.ToString();
+    }
     public void PauseGame()
     {
-       UiController._instance.OpenPauseGame();
-       GameController._instance.isPause = true;
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
+        UiController._instance.OpenPauseGame();
+        GameController._instance.isPause = true;
         Time.timeScale = 0;
     }
     public void CountScore()
     {
          GameController._instance.CountScore();
         _countScore.GetComponent<Score>().CountScore();
+
     }
     public void In()
     {

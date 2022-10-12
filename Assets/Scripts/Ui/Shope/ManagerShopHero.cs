@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,13 +28,33 @@ public class ManagerShopHero : Singleton<ManagerShopHero>
     private void OnEnable()
     {
         _currentDarkClickBtn = _content.transform.GetChild(DataPlayer.GetInforPlayer().idHeroPlaying - 1).GetChild(1).gameObject;
-       //    idHeroSelect = DataPlayer.GetInforPlayer().idHeroPlaying;
-       //_priceHeroSelect = 000;
-       // CheckHeroOnShop(idHeroSelect, _priceHeroSelect);
+        SetAllDisableDackBg();
+         idHeroSelect = DataPlayer.GetInforPlayer().idHeroPlaying;
+        _priceHeroSelect = _content.transform.GetChild(DataPlayer.GetInforPlayer().idHeroPlaying - 1).gameObject.GetComponent<ElementBtn>().GetPriceHero();
+        CheckHeroOnShop(idHeroSelect, _priceHeroSelect);;
         AutoScroll();
+    }
+    public void SetAllDisableDackBg()
+    {
+        int children = _content.transform.childCount;
+        for (int i = 0; i < children; ++i)
+        {
+            if(i != DataPlayer.GetInforPlayer().idHeroPlaying-1)
+            {
+                _content.transform.GetChild(i).gameObject.transform.GetChild(1).gameObject.SetActive(true);
+            }
+            else
+            {
+                _content.transform.GetChild(i).gameObject.transform.GetChild(1).gameObject.SetActive(false);
+            }
+          
+        }
     }
     public void ComeBackHome()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
+        GameController._instance.SetActiveRegionShop(false);
+
         idHeroSelect = DataPlayer.GetInforPlayer().idHeroPlaying;
         UiController._instance.OpenGameHome();
         CameraController._instance.GoToHome();
@@ -55,6 +76,7 @@ public class ManagerShopHero : Singleton<ManagerShopHero>
     }
     private void CheckBuyHero()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         int AmountCoins = DataPlayer.GetInforPlayer().countCoins;
 
         if(AmountCoins>=_priceHeroSelect)
@@ -88,6 +110,7 @@ public class ManagerShopHero : Singleton<ManagerShopHero>
     }
     public void LoadGameWithHeroSelect()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         DataPlayer.UpdateHeroPlaying(idHeroSelect);
         //DisableCurrentHero();
         //GameController._instance.isOnShop = false;

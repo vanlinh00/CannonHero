@@ -16,6 +16,7 @@ public class GameOver : MonoBehaviour
     [SerializeField] Button _reviewBtn;
 
     [SerializeField] Button _resurrect;
+    [SerializeField] Animator _animator;
     private void Awake()
     {
         _comebackHomeBtn.onClick.AddListener(ComeBackHome);
@@ -29,10 +30,17 @@ public class GameOver : MonoBehaviour
     public void ResurrectPlayer()
     {
         SoundController._instance.OnPlayAudio(SoundType.mouse_click);
+        StartCoroutine(WaitTimeAniResurrectPlayer());
+    }
+    IEnumerator WaitTimeAniResurrectPlayer()
+    {
+        StateOut();
+        yield return new WaitForSeconds(0.3f);
         GameController._instance.ResurrectPlayer();
     }
     private void OnEnable()
     {
+        _animator = GetComponent<Animator>();
         UpdateCurrentScore();
     }
     public void UpdateCurrentScore()
@@ -55,25 +63,51 @@ public class GameOver : MonoBehaviour
     public void ComeBackHome()
     {
         SoundController._instance.OnPlayAudio(SoundType.mouse_click);
+        StartCoroutine(WaitTimeAniHome());
+    }
+    IEnumerator WaitTimeAniHome()
+    {
+        StateOut();
+        yield return new WaitForSeconds(0.3f);
         GameController._instance.LoadScenceAgain();
         UiController._instance.OpenGameHome();
-        GamePlay._instance.CountScore();
+        
+       // GamePlay._instance.CountScore();
     }
     public void OpenShop()
     {
         SoundController._instance.OnPlayAudio(SoundType.mouse_click);
+        StartCoroutine(WaitTimeAniOpenShop());
+    }
+    IEnumerator WaitTimeAniOpenShop()
+    {
+        StateOut();
+        yield return new WaitForSeconds(0.3f);
         GameController._instance.SetActiveRegionShop(true);
         GameController._instance.isOnShop = true;
         UiController._instance.OpenShop();
         CameraController._instance.GoToShop();
-
     }
+
     public void ReplayGame()
     {
         SoundController._instance.OnPlayAudio(SoundType.mouse_click);
+
+        StartCoroutine(WaitTimeAniReplayGame());
+    }
+    IEnumerator WaitTimeAniReplayGame()
+    {
+        StateOut();
+        yield return new WaitForSeconds(0.3f);
         GameController._instance.LoadScenceAgain();
         UiController._instance.OpenGamePlay();
-        GamePlay._instance.CountScore();
-
+    }
+    public void StateIn()
+    {
+        _animator.SetBool("In", true);
+    }
+    public void StateOut()
+    {
+        _animator.SetBool("In", false);
     }
 }

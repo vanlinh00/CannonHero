@@ -35,6 +35,7 @@ public class PauseGame : Singleton<PauseGame>
         //UiController._instance.OpenGamePlay();
         //GamePlay._instance.CountScore();
 
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         Time.timeScale = 1;
         SceneManager.LoadScene(0);
     }
@@ -45,22 +46,28 @@ public class PauseGame : Singleton<PauseGame>
         //    GameController._instance.LoadScenceAgain();
         //    UiController._instance.OpenGameHome();
         //    GamePlay._instance.CountScore();    
+
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         Time.timeScale = 1;
         SceneManager.LoadScene(0);
     }
     public void PlayGame()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         Time.timeScale = 1;
+        GameController._instance.isPause = false;
         UiController._instance.OpenGamePlay();
        // GameController._instance.Test();
     }
     public void OnMusic()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         DataPlayer.ChangeStateAudio(!DataPlayer.GetInforPlayer().isOnMusicBg);
         ChangeMusic();
     }
     public void OnSound()
     {
+        SoundController._instance.OnPlayAudio(SoundType.mouse_click);
         DataPlayer.ChangeStateSound(!DataPlayer.GetInforPlayer().isOnSound);
         ChangeSound();
     }

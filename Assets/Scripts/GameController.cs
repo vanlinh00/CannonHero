@@ -20,7 +20,7 @@ public class GameController : Singleton<GameController>
     public bool isNextCol = false;
     private int _currentScore;
     public bool isOnShop = false;
-    public bool isPause = false;
+   public bool isPause = false;
 
     public int CountHeadShot = 0;
     private bool isShowGameOver = false;
@@ -60,7 +60,7 @@ public class GameController : Singleton<GameController>
         CheckCanClick();
         if (_canClick == false/*&& !isDinablePause*/)
         {
-            if(_player.isShoot)
+            if(_player !=null&& _player.isShoot)
             {
 
             }
@@ -70,7 +70,7 @@ public class GameController : Singleton<GameController>
             }
         
         }
-        if (!isOnShop)
+        if (!isOnShop&& !isPause)
             {
                 if (Input.GetMouseButton(0) && !_player.isRotation && isNextCol)
                 {
@@ -326,7 +326,7 @@ public class GameController : Singleton<GameController>
 
     public void ResetScore()
     {
-        _currentScore = -1;
+        _currentScore = 0;
     }
     public void ResFever()
     {

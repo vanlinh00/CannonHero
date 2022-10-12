@@ -7,11 +7,16 @@ public class LoadData : Singleton<LoadData>
     [SerializeField] Vector3 _positionPlayer;
     private void Start()
     {
-        GameObject Player= LoadDataPlayer();
+        StartCoroutine(WaitTimeLoadGame());
+    }
+    IEnumerator WaitTimeLoadGame()
+    {
+        yield return new WaitForSeconds(0.05f);
+        GameObject Player = LoadDataPlayer();
+        yield return new WaitForSeconds(0.1f);
         GameController._instance.SetupPlayer(Player);
         GameController._instance.LoadDataGame();
         LoadDateEnemy();
-
     }
     protected override void Awake()
     {

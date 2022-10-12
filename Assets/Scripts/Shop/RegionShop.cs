@@ -8,18 +8,18 @@ public class RegionShop : Singleton<RegionShop>
     [SerializeField] GameObject _currentHeroLoading;
     protected override void Awake()
     {
+        LoadAllHero();
         base.Awake();
     }
     private void OnEnable()
     {
-        LoadAllHero();
         StartCoroutine(WaitLoadListHero());
-
     }
     IEnumerator WaitLoadListHero()
     {
         yield return new WaitForSeconds(0.1f);
         _currentHeroLoading = _positionAllHeroSelect.transform.GetChild(DataPlayer.GetInforPlayer().idHeroPlaying-1).gameObject;
+        DisableNotHeros();
         LoadHero(DataPlayer.GetInforPlayer().idHeroPlaying);
     }
     public void LoadAllHero()
@@ -35,7 +35,16 @@ public class RegionShop : Singleton<RegionShop>
     public void LoadHero(int IdHero)
     {
         _currentHeroLoading.SetActive(false);
-        _currentHeroLoading= _positionAllHeroSelect.transform.GetChild(IdHero - 1).gameObject;
+           _currentHeroLoading = _positionAllHeroSelect.transform.GetChild(IdHero - 1).gameObject;
         _currentHeroLoading.SetActive(true);
     }
+    public void DisableNotHeros()
+    {
+        int children = _positionAllHeroSelect.transform.childCount;
+        for (int i = 0; i < children; ++i)
+        {
+           _positionAllHeroSelect.transform.GetChild(i).gameObject.SetActive(false);
+        }
+    }
+
 }
