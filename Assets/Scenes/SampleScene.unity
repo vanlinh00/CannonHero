@@ -21356,7 +21356,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveTime: 4
-  _dis2Pillar: 4.76
   target: {x: 0, y: 0, z: 0}
 --- !u!4 &2064100245
 Transform:
@@ -21788,6 +21787,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _positionPlayer: {x: -1.695, y: -1.748, z: 0}
+  _pillarController: {fileID: 2064100244}
+  _backGrounds: {fileID: 1290842192}
 --- !u!1 &2109263107
 GameObject:
   m_ObjectHideFlags: 0

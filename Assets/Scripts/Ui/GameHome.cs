@@ -9,7 +9,6 @@ public class GameHome : MonoBehaviour
     [SerializeField] Button _openShopBtn;
     [SerializeField] Button _musicBtn;
     [SerializeField] Button _soundBtn;
-
     [SerializeField] Animator _animator;
     [SerializeField] Text _bestScore;
 

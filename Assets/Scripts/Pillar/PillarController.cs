@@ -6,7 +6,6 @@ using UnityEngine;
 public class PillarController : MonoBehaviour
 {
     [SerializeField] float _moveTime;
-    [SerializeField] float _dis2Pillar = 4.76f;
     public Vector3 target;
     private void FixedUpdate()
     {

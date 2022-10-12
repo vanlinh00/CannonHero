@@ -28,13 +28,13 @@ public class ManagerShopHero : Singleton<ManagerShopHero>
     private void OnEnable()
     {
         _currentDarkClickBtn = _content.transform.GetChild(DataPlayer.GetInforPlayer().idHeroPlaying - 1).GetChild(1).gameObject;
-        SetAllDisableDackBg();
+        SetAllDisableDarkBg();
          idHeroSelect = DataPlayer.GetInforPlayer().idHeroPlaying;
         _priceHeroSelect = _content.transform.GetChild(DataPlayer.GetInforPlayer().idHeroPlaying - 1).gameObject.GetComponent<ElementBtn>().GetPriceHero();
         CheckHeroOnShop(idHeroSelect, _priceHeroSelect);;
         AutoScroll();
     }
-    public void SetAllDisableDackBg()
+    public void SetAllDisableDarkBg()
     {
         int children = _content.transform.childCount;
         for (int i = 0; i < children; ++i)

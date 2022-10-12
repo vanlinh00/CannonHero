@@ -58,7 +58,7 @@ public class GameController : Singleton<GameController>
     public void Update()
     {
         CheckCanClick();
-        if (_canClick == false/*&& !isDinablePause*/)
+        if (_canClick == false)
         {
             if(_player !=null&& _player.isShoot)
             {
@@ -290,13 +290,7 @@ public class GameController : Singleton<GameController>
         _regionShop.SetActive(res);
     }
 
-    public void LoadDataGame()
-    {
-         idBg = Random.RandomRange(1, 4);
-         _pillarController.SetUpGame();
-        WallController._instance.Init();
-        BackGrounds.GetComponent<BackGrounds>().Init();
-    }
+  
     public void EnableSoundRifleCock()
     {
         SoundController._instance.OnPlayAudio(SoundType.rifle_cock);
@@ -305,11 +299,9 @@ public class GameController : Singleton<GameController>
     public void LoadScenceAgain()
     {
         OldObjectPool._instance.SettDisableAllObject();
-
         _pillarController.ResetPillarController();
         WallController._instance.ResetAllWalls();
         BackGrounds.GetComponent<BackGrounds>().ResetBg();
-
         CameraController._instance.transform.position = new Vector3(0, 0, -10f);
         _player.RecurrectPlayer();
         _player.transform.position = _player.startPos;
@@ -320,7 +312,7 @@ public class GameController : Singleton<GameController>
 
         ResetScore();
         ResFever();
-        LoadDataGame();
+        LoadData._instance.LoadDataGame();
         UpdateCurrentEnemy(0);
     }
 

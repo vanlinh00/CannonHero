@@ -5,6 +5,8 @@ using UnityEngine;
 public class LoadData : Singleton<LoadData>
 {
     [SerializeField] Vector3 _positionPlayer;
+    [SerializeField] PillarController _pillarController;
+    [SerializeField] BackGrounds _backGrounds;
     private void Start()
     {
         StartCoroutine(WaitTimeLoadGame());
@@ -15,8 +17,9 @@ public class LoadData : Singleton<LoadData>
         GameObject Player = LoadDataPlayer();
         yield return new WaitForSeconds(0.1f);
         GameController._instance.SetupPlayer(Player);
-        GameController._instance.LoadDataGame();
-        LoadDateEnemy();
+
+        LoadDataGame();
+        GameController._instance.SetUpEnemy();
     }
     protected override void Awake()
     {
@@ -29,10 +32,6 @@ public class LoadData : Singleton<LoadData>
         Player.transform.SetParent(null);
         return Player;
     }
-    public void LoadDateEnemy()
-    {
-        GameController._instance.SetUpEnemy();
-    }
     public void LoadDiaamonds()
     {
         for(int i=1;i<=4;i++ )
@@ -42,5 +41,12 @@ public class LoadData : Singleton<LoadData>
             ObjectPooler._instance.CreateQueObject(2, "Diamond0" + i, Diamond);
         }
 
+    }
+    public void LoadDataGame()
+    {
+        GameController._instance.idBg = Random.RandomRange(1, 4);
+        _pillarController.SetUpGame();
+        WallController._instance.Init();
+        _backGrounds.Init();
     }
 }
